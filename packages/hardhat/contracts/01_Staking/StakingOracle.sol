@@ -50,6 +50,7 @@ contract StakingOracle {
         uint256 medianPrice;
     }
 
+
     mapping(address => OracleNode) public nodes;
     mapping(uint256 => BlockBucket) public blockBuckets; // one bucket per 24 blocks
     address[] public nodeAddresses;
@@ -105,7 +106,25 @@ contract StakingOracle {
      * @dev Creates a new OracleNode struct and adds the sender to the nodeAddresses array.
      *      Requires minimum stake amount and prevents duplicate registrations.
      */
-    function registerNode(uint256 amount) public {}
+    function registerNode(uint256 amount) public {
+        if (nodes[msg.sender].active) revert NodeAlreadyRegistered();
+        if (amount < MINIMUM_STAKE) revert InsufficientStake();
+        // Transfer ORA tokens from the node to the contract as stake
+        bool success = oracleToken.transferFrom(msg.sender, address(this), amount);
+        if (!success) revert TransferFailed();
+        // Create the node and add to the mapping and addresses array
+        nodes[msg.sender] = OracleNode({
+            stakedAmount: amount,
+            lastReportedBucket: 0,
+            reportCount: 0,
+            claimedReportCount: 0,
+            firstBucket: getCurrentBucketNumber(),
+            active: true
+        });
+
+        nodeAddresses.push(msg.sender);
+        emit NodeRegistered(msg.sender, amount);
+    }
 
     /**
      * @notice Updates the price reported by an oracle node (only registered nodes)
@@ -123,7 +142,15 @@ contract StakingOracle {
     /**
      * @notice Allows a registered node to increase its ORA token stake
      */
-    function addStake(uint256 amount) public onlyNode {}
+    function addStake(uint256 amount) public onlyNode {
+         if (amount == 0) revert InsufficientStake();
+
+         bool success = oracleToken.transferFrom(msg.sender, address(this), amount);
+         if (!success) revert TransferFailed();
+
+         nodes[msg.sender].stakedAmount += amount;
+         emit StakeAdded(msg.sender, amount);
+    }
 
     /**
      * @notice Records the median price for a bucket once sufficient reports are available
@@ -172,7 +199,9 @@ contract StakingOracle {
      * @notice Returns the list of registered oracle node addresses
      * @return Array of registered oracle node addresses
      */
-    function getNodeAddresses() public view returns (address[] memory) {}
+    function getNodeAddresses() public view returns (address[] memory) {
+        return nodeAddresses;
+    }
 
     /**
      * @notice Returns the stored median price from the most recently completed bucket
@@ -204,7 +233,23 @@ contract StakingOracle {
      * @notice Returns the effective stake accounting for inactivity penalties via missed buckets
      * @dev Effective stake = stakedAmount - (missedBuckets * INACTIVITY_PENALTY), floored at 0
      */
-    function getEffectiveStake(address nodeAddress) public view returns (uint256) {}
+    function getEffectiveStake(address nodeAddress) public view returns (uint256) {
+        OracleNode memory node = nodes[nodeAddress];
+        if (!node.active) return 0;
+        uint256 currentBucket = getCurrentBucketNumber();
+        if (currentBucket== node.firstBucket) return node.stakedAmount; // no penalty in first bucket
+        uint256 expectedReoportCount = currentBucket - node.firstBucket;
+        uint256 actualReportCount = node.reportCount;
+        if (node.lastReportedBucket == currentBucket && actualReportCount > 0) {
+            actualReportCount -= 1; // don't count current bucket if already reported in it, since it can't be missed
+        }
+        
+        if (actualReportCount >= expectedReoportCount) return node.stakedAmount; // no penalty if node has reported in all expected buckets
+        uint256 missedBuckets = expectedReoportCount - actualReportCount;
+        uint256 penalty = missedBuckets * INACTIVITY_PENALTY;
+        if (penalty >= node.stakedAmount) return 0; // full penalty if penalty exceeds or equals staked amount
+        return node.stakedAmount - penalty; // effective stake
+    }
 
     /**
      * @notice Returns the addresses of nodes in a bucket whose reported price deviates beyond the threshold
