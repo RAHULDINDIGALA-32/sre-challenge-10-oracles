@@ -102,7 +102,7 @@ const deployedContracts = {
         },
       ],
       inheritedFunctions: {},
-      deployedOnBlock: 6914,
+      deployedOnBlock: 535,
     },
     OptimisticOracle: {
       address: "0x0B306BF915C4d645ff596e518fAf3F9669b97016",
@@ -742,7 +742,7 @@ const deployedContracts = {
         },
       ],
       inheritedFunctions: {},
-      deployedOnBlock: 6910,
+      deployedOnBlock: 531,
     },
     ORA: {
       address: "0xA51c1fc2f0D1a1b8494Ed1FE312d7C3a78Ed91C0",
@@ -1259,7 +1259,7 @@ const deployedContracts = {
         },
       ],
       inheritedFunctions: {},
-      deployedOnBlock: 6901,
+      deployedOnBlock: 522,
     },
     StakingOracle: {
       address: "0x0DCd1Bf9A1b36cE34237eEaFef220932846BCD82",
@@ -1283,6 +1283,11 @@ const deployedContracts = {
         {
           inputs: [],
           name: "BucketMedianAlreadyRecorded",
+          type: "error",
+        },
+        {
+          inputs: [],
+          name: "EmptyArray",
           type: "error",
         },
         {
@@ -1920,7 +1925,7 @@ const deployedContracts = {
         },
       ],
       inheritedFunctions: {},
-      deployedOnBlock: 6905,
+      deployedOnBlock: 526,
     },
     WhitelistOracle: {
       address: "0x5FbDB2315678afecb367f032d93F642f64180aa3",
@@ -2081,7 +2086,7 @@ const deployedContracts = {
         },
       ],
       inheritedFunctions: {},
-      deployedOnBlock: 6885,
+      deployedOnBlock: 505,
     },
   },
 } as const;

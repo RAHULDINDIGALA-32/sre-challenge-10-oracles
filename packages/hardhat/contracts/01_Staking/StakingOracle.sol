@@ -192,7 +192,7 @@ contract StakingOracle {
         if(bucket.medianPrice !=0) revert BucketMedianAlreadyRecorded(); // prevent overwriting median once recorded 
         if(bucket.prices.length == 0) revert NodeDidNotReport();
 
-        uint256 memory prices = bucket.prices;
+        uint256[] memory prices = bucket.prices;
         prices.sort();
         bucket.medianPrice = prices.getMedian();
 
@@ -211,7 +211,39 @@ contract StakingOracle {
         uint256 bucketNumber,
         uint256 reportIndex,
         uint256 nodeAddressesIndex
-    ) public {}
+    ) public {
+        if (!nodes[nodeToSlash].active) revert NodeNotRegistered();
+        if (bucketNumber >= getCurrentBucketNumber()) revert OnlyPastBucketsAllowed();
+        
+        BlockBucket storage bucket = blockBuckets[bucketNumber];
+        if (bucket.medianPrice == 0) revert MedianNotRecorded();
+        if (bucket.slashedOffenses[nodeToSlash]) revert NodeAlreadySlashed();
+        if (reportIndex >= bucket.reporters.length) revert IndexOutOfBounds();
+        if (nodeToSlash != bucket.reporters[reportIndex]) revert NodeNotAtGivenIndex();
+
+        uint256 reportedPrice = bucket.prices[reportIndex];
+        if (reportedPrice == 0) revert NodeDidNotReport();
+        if (!_checkPriceDeviated(reportedPrice, bucket.medianPrice)) revert NotDeviated();
+
+        bucket.slashedOffenses[nodeToSlash] = true;
+        OracleNode storage node = nodes[nodeToSlash];
+
+        uint256 penaltyAmount = MISREPORT_PENALTY > node.stakedAmount ? node.stakedAmount : MISREPORT_PENALTY;
+        node.stakedAmount -= penaltyAmount;
+
+        if (node.stakedAmount == 0) {
+            _removeNode(nodeToSlash, nodeAddressesIndex);
+            emit NodeExited(nodeToSlash, 0);
+        }
+
+        uint256 rewardAmount = (penaltyAmount * SLASHER_REWARD_PERCENTAGE) / 100;
+
+        bool success = oracleToken.transfer(msg.sender, rewardAmount);
+        if (!success) revert TransferFailed();
+
+        emit NodeSlashed(nodeToSlash, penaltyAmount);
+
+    }
 
     /**
      * @notice Allows a registered node to exit the system and withdraw their stake
@@ -220,7 +252,23 @@ contract StakingOracle {
      *      node has been slashed if it reported a bad price before allowing it to exit.
      * @param index The index of the node to remove in nodeAddresses
      */
-    function exitNode(uint256 index) public onlyNode {}
+    function exitNode(uint256 index) public onlyNode {
+        if (index >= nodeAddresses.length) revert IndexOutOfBounds();
+        if (nodeAddresses[index] != msg.sender) revert NodeNotAtGivenIndex();
+        
+        OracleNode storage node = nodes[msg.sender];
+       if (getCurrentBucketNumber() < node.lastReportedBucket + WAITING_PERIOD) revert WaitingPeriodNotOver();
+
+        uint256 effectiveStake = getEffectiveStake(msg.sender);
+
+        _removeNode(nodeAddresses[index], index);
+        nodes[msg.sender].stakedAmount = 0; // set stake to 0 after removing node to prevent re-entrancy issues
+
+        bool success = oracleToken.transfer(msg.sender, effectiveStake);
+        if (!success) revert TransferFailed();
+
+        emit NodeExited(msg.sender, effectiveStake);
+    }
 
     ////////////////////////
     /// View Functions /////
@@ -316,7 +364,33 @@ contract StakingOracle {
      * @param bucketNumber The bucket number to get the outliers from
      * @return Array of node addresses considered outliers
      */
-    function getOutlierNodes(uint256 bucketNumber) public view returns (address[] memory) {}
+    function getOutlierNodes(uint256 bucketNumber) public view returns (address[] memory) {
+        BlockBucket storage bucket = blockBuckets[bucketNumber];
+        if (bucket.medianPrice == 0) revert MedianNotRecorded();
+
+        address[] memory outliers = new address[](bucket.reporters.length);
+        uint256 outlierCount = 0;
+
+        for (uint256 i = 0; i < bucket.reporters.length; i++) {
+            address reporter = bucket.reporters[i];
+            if (bucket.slashedOffenses[reporter]) continue; // skip already slashed nodes
+            
+            uint256 reportedPrice = bucket.prices[i];
+            if (reportedPrice == 0) continue;
+
+            if (_checkPriceDeviated(reportedPrice, bucket.medianPrice)) {
+                outliers[outlierCount] = bucket.reporters[i];
+                outlierCount++;
+            }
+        }
+
+        // Resize the array to the actual number of outliers
+        assembly {
+            mstore(outliers, outlierCount)
+        }
+        
+        return outliers;
+    }
 
     //////////////////////////
     /// Internal Functions ///
@@ -327,7 +401,19 @@ contract StakingOracle {
      * @param nodeAddress The address of the node to remove
      * @param index The index of the node to remove
      */
-    function _removeNode(address nodeAddress, uint256 index) internal {}
+    function _removeNode(address nodeAddress, uint256 index) internal {
+        if (index >= nodeAddresses.length) revert IndexOutOfBounds();
+        if (nodeAddresses[index] != nodeAddress) revert NodeNotAtGivenIndex();
+
+        // Move the last element to the index to delete and pop the last element
+        uint256 lastIndex = nodeAddresses.length - 1;
+        if (index != lastIndex) {
+            nodeAddresses[index] = nodeAddresses[lastIndex];
+        }
+        nodeAddresses.pop();
+
+        nodes[nodeAddress].active = false; // mark node as inactive
+    }
 
     /**
      * @notice Checks if the price deviation is greater than the threshold
