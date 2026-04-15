@@ -131,13 +131,42 @@ contract StakingOracle {
      * @dev Updates the node's lastReportedBucket and price in that bucket. Requires sufficient stake.
      * @param price The new price value to report
      */
-    function reportPrice(uint256 price) public onlyNode {}
+    function reportPrice(uint256 price) public onlyNode {
+        if (price == 0) revert InvalidPrice();
+        if (getEffectiveStake(msg.sender) < MINIMUM_STAKE) revert InsufficientStake();
+        uint256 currentBucket = getCurrentBucketNumber();
+        OracleNode storage node = nodes[msg.sender];
+        if (node.lastReportedBucket == currentBucket) revert AlreadyReportedInCurrentBucket();
+        
+        BlockBucket storage bucket = blockBuckets[currentBucket];
+        bucket.reporters.push(msg.sender);
+        bucket.prices.push(price);
+
+        node.lastReportedBucket = currentBucket;
+        node.reportCount += 1;
+
+        emit PriceReported(msg.sender, price, currentBucket);
+    }
 
     /**
      * @notice Allows active and inactive nodes to claim accumulated ORA token rewards
      * @dev Calculates rewards based on time elapsed since last claim.
      */
-    function claimReward() public {}
+    function claimReward() public {
+        OracleNode storage node = nodes[msg.sender];
+
+        uint256 delta = node.reportCount - node.claimedReportCount;
+        if (delta == 0) revert NoRewardsAvailable();
+
+        node.claimedReportCount = node.reportCount;
+        uint256 reward = delta * REWARD_PER_REPORT;
+        // bool success = oracleToken.transfer(msg.sender, reward);
+        // if(!success) revert TransferFailed();
+        oracleToken.mint(msg.sender, reward);
+
+        emit NodeRewarded(msg.sender, reward);
+
+    }
 
     /**
      * @notice Allows a registered node to increase its ORA token stake
@@ -157,7 +186,18 @@ contract StakingOracle {
      * @dev Anyone who uses the oracle's price feed can call this function to record the median price for a bucket.
      * @param bucketNumber The bucket number to finalize
      */
-    function recordBucketMedian(uint256 bucketNumber) public {}
+    function recordBucketMedian(uint256 bucketNumber) public {
+        if (bucketNumber >= getCurrentBucketNumber()) revert OnlyPastBucketsAllowed();
+        BlockBucket storage bucket = blockBuckets[bucketNumber];
+        if(bucket.medianPrice !=0) revert BucketMedianAlreadyRecorded(); // prevent overwriting median once recorded 
+        if(bucket.prices.length == 0) revert NodeDidNotReport();
+
+        uint256 memory prices = bucket.prices;
+        prices.sort();
+        bucket.medianPrice = prices.getMedian();
+
+        emit BucketMedianRecorded(bucketNumber, bucket.medianPrice); 
+    }
 
     /**
      * @notice Slashes a node for giving a price that is deviated too far from the average
@@ -208,14 +248,24 @@ contract StakingOracle {
      * @dev Requires that the median for the bucket be recorded via recordBucketMedian
      * @return The median price for the last finalized bucket
      */
-    function getLatestPrice() public view returns (uint256) {}
+    function getLatestPrice() public view returns (uint256) {
+        uint256 latestBucket = getCurrentBucketNumber() - 1;
+        if (blockBuckets[latestBucket].medianPrice == 0) revert MedianNotRecorded();
+        
+        return blockBuckets[latestBucket].medianPrice;
+    }
 
     /**
      * @notice Returns the stored median price from a specified bucket
      * @param bucketNumber The bucket number to read the median price from
      * @return The median price stored for the bucket
      */
-    function getPastPrice(uint256 bucketNumber) public view returns (uint256) {}
+    function getPastPrice(uint256 bucketNumber) public view returns (uint256) {
+       // if (bucketNumber >= getCurrentBucketNumber()) revert OnlyPastBucketsAllowed();
+        if (blockBuckets[bucketNumber].medianPrice == 0) revert MedianNotRecorded();
+        
+        return blockBuckets[bucketNumber].medianPrice;
+    }
 
     /**
      * @notice Returns the price and slashed status of a node at a given bucket
@@ -227,7 +277,17 @@ contract StakingOracle {
     function getSlashedStatus(
         address nodeAddress,
         uint256 bucketNumber
-    ) public view returns (uint256 price, bool slashed) {}
+    ) public view returns (uint256 price, bool slashed) {
+        BlockBucket storage bucket = blockBuckets[bucketNumber];
+        for (uint256 i = 0; i < bucket.reporters.length; i++) {
+            if (bucket.reporters[i] == nodeAddress) {
+                price = bucket.prices[i];
+                slashed = bucket.slashedOffenses[nodeAddress];
+                return (price, slashed);
+            }
+        }
+       // revert NodeNotRegistered(); // node did not report in this bucket, so consider it not registered for this bucket
+    }
 
     /**
      * @notice Returns the effective stake accounting for inactivity penalties via missed buckets
@@ -275,5 +335,10 @@ contract StakingOracle {
      * @param medianPrice The average price of the bucket
      * @return True if the price deviation is greater than the threshold, false otherwise
      */
-    function _checkPriceDeviated(uint256 reportedPrice, uint256 medianPrice) internal pure returns (bool) {}
+    function _checkPriceDeviated(uint256 reportedPrice, uint256 medianPrice) internal pure returns (bool) {
+        uint256 priceDeviation = reportedPrice > medianPrice ? reportedPrice - medianPrice : medianPrice - reportedPrice;
+        uint256 deviationBps = (priceDeviation * 10_000) / medianPrice;
+
+        return deviationBps > MAX_DEVIATION_BPS;
+    }
 }
