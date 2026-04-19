@@ -1,0 +1,1028 @@
+{
+  "address": "0xBabbdab28Df196338b776642c3E680a442764B46",
+  "abi": [
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "oraTokenAddress",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "nonpayable",
+      "type": "constructor"
+    },
+    {
+      "inputs": [],
+      "name": "AlreadyReportedInCurrentBucket",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "BucketMedianAlreadyRecorded",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "EmptyArray",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "IndexOutOfBounds",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "InsufficientStake",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "InvalidPrice",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "MedianNotRecorded",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "NoRewardsAvailable",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "NodeAlreadyRegistered",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "NodeAlreadySlashed",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "NodeDidNotReport",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "NodeNotAtGivenIndex",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "NodeNotRegistered",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "NotDeviated",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "OnlyPastBucketsAllowed",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "TransferFailed",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "WaitingPeriodNotOver",
+      "type": "error"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "uint256",
+          "name": "bucketNumber",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "medianPrice",
+          "type": "uint256"
+        }
+      ],
+      "name": "BucketMedianRecorded",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "node",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "amount",
+          "type": "uint256"
+        }
+      ],
+      "name": "NodeExited",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "node",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "stakedAmount",
+          "type": "uint256"
+        }
+      ],
+      "name": "NodeRegistered",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "node",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "amount",
+          "type": "uint256"
+        }
+      ],
+      "name": "NodeRewarded",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "node",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "amount",
+          "type": "uint256"
+        }
+      ],
+      "name": "NodeSlashed",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "node",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "price",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "bucketNumber",
+          "type": "uint256"
+        }
+      ],
+      "name": "PriceReported",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "node",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "amount",
+          "type": "uint256"
+        }
+      ],
+      "name": "StakeAdded",
+      "type": "event"
+    },
+    {
+      "inputs": [],
+      "name": "BUCKET_WINDOW",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "INACTIVITY_PENALTY",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "MAX_DEVIATION_BPS",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "MINIMUM_STAKE",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "MISREPORT_PENALTY",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "REWARD_PER_REPORT",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "SLASHER_REWARD_PERCENTAGE",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "WAITING_PERIOD",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "amount",
+          "type": "uint256"
+        }
+      ],
+      "name": "addStake",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "name": "blockBuckets",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "medianPrice",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "claimReward",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "index",
+          "type": "uint256"
+        }
+      ],
+      "name": "exitNode",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getCurrentBucketNumber",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "nodeAddress",
+          "type": "address"
+        }
+      ],
+      "name": "getEffectiveStake",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getLatestPrice",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getNodeAddresses",
+      "outputs": [
+        {
+          "internalType": "address[]",
+          "name": "",
+          "type": "address[]"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "bucketNumber",
+          "type": "uint256"
+        }
+      ],
+      "name": "getOutlierNodes",
+      "outputs": [
+        {
+          "internalType": "address[]",
+          "name": "",
+          "type": "address[]"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "bucketNumber",
+          "type": "uint256"
+        }
+      ],
+      "name": "getPastPrice",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "nodeAddress",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "bucketNumber",
+          "type": "uint256"
+        }
+      ],
+      "name": "getSlashedStatus",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "price",
+          "type": "uint256"
+        },
+        {
+          "internalType": "bool",
+          "name": "slashed",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "name": "nodeAddresses",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "name": "nodes",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "stakedAmount",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "lastReportedBucket",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "reportCount",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "claimedReportCount",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "firstBucket",
+          "type": "uint256"
+        },
+        {
+          "internalType": "bool",
+          "name": "active",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "oracleToken",
+      "outputs": [
+        {
+          "internalType": "contract ORA",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "bucketNumber",
+          "type": "uint256"
+        }
+      ],
+      "name": "recordBucketMedian",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "amount",
+          "type": "uint256"
+        }
+      ],
+      "name": "registerNode",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "price",
+          "type": "uint256"
+        }
+      ],
+      "name": "reportPrice",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "nodeToSlash",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "bucketNumber",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "reportIndex",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "nodeAddressesIndex",
+          "type": "uint256"
+        }
+      ],
+      "name": "slashNode",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    }
+  ],
+  "transactionHash": "0xf520c10de7b1ab24d935201b9f78e93089f1b3774f52eaf993beb77f05e8b4e4",
+  "receipt": {
+    "to": null,
+    "from": "0xc512c6DE79Ca12E5AA90224f372569fcaf8e68f9",
+    "contractAddress": "0xBabbdab28Df196338b776642c3E680a442764B46",
+    "transactionIndex": 103,
+    "gasUsed": "1551203",
+    "logsBloom": "0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+    "blockHash": "0x4b0a87e2d839940778cd8dcfd529c36e481ce6ad2528585f7ce3928ecf9843e8",
+    "transactionHash": "0xf520c10de7b1ab24d935201b9f78e93089f1b3774f52eaf993beb77f05e8b4e4",
+    "logs": [],
+    "blockNumber": 10692204,
+    "cumulativeGasUsed": "20860647",
+    "status": 1,
+    "byzantium": true
+  },
+  "args": [
+    "0x0E8fB5b3eFA697CcC2AB4ee6744425B046Fa2322"
+  ],
+  "numDeployments": 1,
+  "solcInputHash": "9d5f3885935171f07e79e658febaddc0",
+  "metadata": "{\"compiler\":{\"version\":\"0.8.30+commit.73712a01\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[{\"internalType\":\"address\",\"name\":\"oraTokenAddress\",\"type\":\"address\"}],\"stateMutability\":\"nonpayable\",\"type\":\"constructor\"},{\"inputs\":[],\"name\":\"AlreadyReportedInCurrentBucket\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"BucketMedianAlreadyRecorded\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"EmptyArray\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"IndexOutOfBounds\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"InsufficientStake\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"InvalidPrice\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"MedianNotRecorded\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"NoRewardsAvailable\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"NodeAlreadyRegistered\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"NodeAlreadySlashed\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"NodeDidNotReport\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"NodeNotAtGivenIndex\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"NodeNotRegistered\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"NotDeviated\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"OnlyPastBucketsAllowed\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"TransferFailed\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"WaitingPeriodNotOver\",\"type\":\"error\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"uint256\",\"name\":\"bucketNumber\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"medianPrice\",\"type\":\"uint256\"}],\"name\":\"BucketMedianRecorded\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"node\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"}],\"name\":\"NodeExited\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"node\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"stakedAmount\",\"type\":\"uint256\"}],\"name\":\"NodeRegistered\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"node\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"}],\"name\":\"NodeRewarded\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"node\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"}],\"name\":\"NodeSlashed\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"node\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"price\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"bucketNumber\",\"type\":\"uint256\"}],\"name\":\"PriceReported\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":true,\"internalType\":\"address\",\"name\":\"node\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"}],\"name\":\"StakeAdded\",\"type\":\"event\"},{\"inputs\":[],\"name\":\"BUCKET_WINDOW\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"INACTIVITY_PENALTY\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"MAX_DEVIATION_BPS\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"MINIMUM_STAKE\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"MISREPORT_PENALTY\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"REWARD_PER_REPORT\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"SLASHER_REWARD_PERCENTAGE\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"WAITING_PERIOD\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"}],\"name\":\"addStake\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"name\":\"blockBuckets\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"medianPrice\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"claimReward\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"index\",\"type\":\"uint256\"}],\"name\":\"exitNode\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getCurrentBucketNumber\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"nodeAddress\",\"type\":\"address\"}],\"name\":\"getEffectiveStake\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getLatestPrice\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getNodeAddresses\",\"outputs\":[{\"internalType\":\"address[]\",\"name\":\"\",\"type\":\"address[]\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"bucketNumber\",\"type\":\"uint256\"}],\"name\":\"getOutlierNodes\",\"outputs\":[{\"internalType\":\"address[]\",\"name\":\"\",\"type\":\"address[]\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"bucketNumber\",\"type\":\"uint256\"}],\"name\":\"getPastPrice\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"nodeAddress\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"bucketNumber\",\"type\":\"uint256\"}],\"name\":\"getSlashedStatus\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"price\",\"type\":\"uint256\"},{\"internalType\":\"bool\",\"name\":\"slashed\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"name\":\"nodeAddresses\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"name\":\"nodes\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"stakedAmount\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"lastReportedBucket\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"reportCount\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"claimedReportCount\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"firstBucket\",\"type\":\"uint256\"},{\"internalType\":\"bool\",\"name\":\"active\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"oracleToken\",\"outputs\":[{\"internalType\":\"contract ORA\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"bucketNumber\",\"type\":\"uint256\"}],\"name\":\"recordBucketMedian\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"}],\"name\":\"registerNode\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"price\",\"type\":\"uint256\"}],\"name\":\"reportPrice\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"nodeToSlash\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"bucketNumber\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"reportIndex\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"nodeAddressesIndex\",\"type\":\"uint256\"}],\"name\":\"slashNode\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{\"claimReward()\":{\"details\":\"Calculates rewards based on time elapsed since last claim.\"},\"exitNode(uint256)\":{\"details\":\"Removes the node from the system and sends the stake to the node.      Requires that the the initial waiting period has passed to ensure the      node has been slashed if it reported a bad price before allowing it to exit.\",\"params\":{\"index\":\"The index of the node to remove in nodeAddresses\"}},\"getCurrentBucketNumber()\":{\"details\":\"Returns the current bucket number based on the block number\",\"returns\":{\"_0\":\"The current bucket number\"}},\"getEffectiveStake(address)\":{\"details\":\"Effective stake = stakedAmount - (missedBuckets * INACTIVITY_PENALTY), floored at 0\"},\"getLatestPrice()\":{\"details\":\"Requires that the median for the bucket be recorded via recordBucketMedian\",\"returns\":{\"_0\":\"The median price for the last finalized bucket\"}},\"getNodeAddresses()\":{\"returns\":{\"_0\":\"Array of registered oracle node addresses\"}},\"getOutlierNodes(uint256)\":{\"params\":{\"bucketNumber\":\"The bucket number to get the outliers from\"},\"returns\":{\"_0\":\"Array of node addresses considered outliers\"}},\"getPastPrice(uint256)\":{\"params\":{\"bucketNumber\":\"The bucket number to read the median price from\"},\"returns\":{\"_0\":\"The median price stored for the bucket\"}},\"getSlashedStatus(address,uint256)\":{\"params\":{\"bucketNumber\":\"The bucket number to get the data from\",\"nodeAddress\":\"The address of the node to get the data for\"},\"returns\":{\"price\":\"The price of the node at the specified bucket\",\"slashed\":\"The slashed status of the node at the specified bucket\"}},\"recordBucketMedian(uint256)\":{\"details\":\"Anyone who uses the oracle's price feed can call this function to record the median price for a bucket.\",\"params\":{\"bucketNumber\":\"The bucket number to finalize\"}},\"registerNode(uint256)\":{\"details\":\"Creates a new OracleNode struct and adds the sender to the nodeAddresses array.      Requires minimum stake amount and prevents duplicate registrations.\"},\"reportPrice(uint256)\":{\"details\":\"Updates the node's lastReportedBucket and price in that bucket. Requires sufficient stake.\",\"params\":{\"price\":\"The new price value to report\"}},\"slashNode(address,uint256,uint256,uint256)\":{\"params\":{\"bucketNumber\":\"The bucket number to slash the node from\",\"nodeAddressesIndex\":\"The index of the node to slash in the nodeAddresses array\",\"nodeToSlash\":\"The address of the node to slash\",\"reportIndex\":\"The index of node in the prices and reporters arrays\"}}},\"version\":1},\"userdoc\":{\"errors\":{\"EmptyArray()\":[{\"notice\":\"Errors //////\"}],\"NodeNotRegistered()\":[{\"notice\":\"Errors //////\"}]},\"events\":{\"NodeRegistered(address,uint256)\":{\"notice\":\"Events /////\"}},\"kind\":\"user\",\"methods\":{\"addStake(uint256)\":{\"notice\":\"Allows a registered node to increase its ORA token stake\"},\"claimReward()\":{\"notice\":\"Allows active and inactive nodes to claim accumulated ORA token rewards\"},\"constructor\":{\"notice\":\"Constructor ///\"},\"exitNode(uint256)\":{\"notice\":\"Allows a registered node to exit the system and withdraw their stake\"},\"getCurrentBucketNumber()\":{\"notice\":\"Returns the current bucket number\"},\"getEffectiveStake(address)\":{\"notice\":\"Returns the effective stake accounting for inactivity penalties via missed buckets\"},\"getLatestPrice()\":{\"notice\":\"Returns the stored median price from the most recently completed bucket\"},\"getNodeAddresses()\":{\"notice\":\"Returns the list of registered oracle node addresses\"},\"getOutlierNodes(uint256)\":{\"notice\":\"Returns the addresses of nodes in a bucket whose reported price deviates beyond the threshold\"},\"getPastPrice(uint256)\":{\"notice\":\"Returns the stored median price from a specified bucket\"},\"getSlashedStatus(address,uint256)\":{\"notice\":\"Returns the price and slashed status of a node at a given bucket\"},\"oracleToken()\":{\"notice\":\"State Variables //\"},\"recordBucketMedian(uint256)\":{\"notice\":\"Records the median price for a bucket once sufficient reports are available\"},\"registerNode(uint256)\":{\"notice\":\"Registers a new oracle node with initial ORA token stake\"},\"reportPrice(uint256)\":{\"notice\":\"Updates the price reported by an oracle node (only registered nodes)\"},\"slashNode(address,uint256,uint256,uint256)\":{\"notice\":\"Slashes a node for giving a price that is deviated too far from the average\"}},\"version\":1}},\"settings\":{\"compilationTarget\":{\"contracts/01_Staking/StakingOracle.sol\":\"StakingOracle\"},\"evmVersion\":\"paris\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\",\"useLiteralContent\":true},\"optimizer\":{\"enabled\":true,\"runs\":200},\"remappings\":[]},\"sources\":{\"@openzeppelin/contracts/access/Ownable.sol\":{\"content\":\"// SPDX-License-Identifier: MIT\\n// OpenZeppelin Contracts (last updated v5.0.0) (access/Ownable.sol)\\n\\npragma solidity ^0.8.20;\\n\\nimport {Context} from \\\"../utils/Context.sol\\\";\\n\\n/**\\n * @dev Contract module which provides a basic access control mechanism, where\\n * there is an account (an owner) that can be granted exclusive access to\\n * specific functions.\\n *\\n * The initial owner is set to the address provided by the deployer. This can\\n * later be changed with {transferOwnership}.\\n *\\n * This module is used through inheritance. It will make available the modifier\\n * `onlyOwner`, which can be applied to your functions to restrict their use to\\n * the owner.\\n */\\nabstract contract Ownable is Context {\\n    address private _owner;\\n\\n    /**\\n     * @dev The caller account is not authorized to perform an operation.\\n     */\\n    error OwnableUnauthorizedAccount(address account);\\n\\n    /**\\n     * @dev The owner is not a valid owner account. (eg. `address(0)`)\\n     */\\n    error OwnableInvalidOwner(address owner);\\n\\n    event OwnershipTransferred(address indexed previousOwner, address indexed newOwner);\\n\\n    /**\\n     * @dev Initializes the contract setting the address provided by the deployer as the initial owner.\\n     */\\n    constructor(address initialOwner) {\\n        if (initialOwner == address(0)) {\\n            revert OwnableInvalidOwner(address(0));\\n        }\\n        _transferOwnership(initialOwner);\\n    }\\n\\n    /**\\n     * @dev Throws if called by any account other than the owner.\\n     */\\n    modifier onlyOwner() {\\n        _checkOwner();\\n        _;\\n    }\\n\\n    /**\\n     * @dev Returns the address of the current owner.\\n     */\\n    function owner() public view virtual returns (address) {\\n        return _owner;\\n    }\\n\\n    /**\\n     * @dev Throws if the sender is not the owner.\\n     */\\n    function _checkOwner() internal view virtual {\\n        if (owner() != _msgSender()) {\\n            revert OwnableUnauthorizedAccount(_msgSender());\\n        }\\n    }\\n\\n    /**\\n     * @dev Leaves the contract without owner. It will not be possible to call\\n     * `onlyOwner` functions. Can only be called by the current owner.\\n     *\\n     * NOTE: Renouncing ownership will leave the contract without an owner,\\n     * thereby disabling any functionality that is only available to the owner.\\n     */\\n    function renounceOwnership() public virtual onlyOwner {\\n        _transferOwnership(address(0));\\n    }\\n\\n    /**\\n     * @dev Transfers ownership of the contract to a new account (`newOwner`).\\n     * Can only be called by the current owner.\\n     */\\n    function transferOwnership(address newOwner) public virtual onlyOwner {\\n        if (newOwner == address(0)) {\\n            revert OwnableInvalidOwner(address(0));\\n        }\\n        _transferOwnership(newOwner);\\n    }\\n\\n    /**\\n     * @dev Transfers ownership of the contract to a new account (`newOwner`).\\n     * Internal function without access restriction.\\n     */\\n    function _transferOwnership(address newOwner) internal virtual {\\n        address oldOwner = _owner;\\n        _owner = newOwner;\\n        emit OwnershipTransferred(oldOwner, newOwner);\\n    }\\n}\\n\",\"keccak256\":\"0xff6d0bb2e285473e5311d9d3caacb525ae3538a80758c10649a4d61029b017bb\",\"license\":\"MIT\"},\"@openzeppelin/contracts/interfaces/draft-IERC6093.sol\":{\"content\":\"// SPDX-License-Identifier: MIT\\n// OpenZeppelin Contracts (last updated v5.0.0) (interfaces/draft-IERC6093.sol)\\npragma solidity ^0.8.20;\\n\\n/**\\n * @dev Standard ERC20 Errors\\n * Interface of the https://eips.ethereum.org/EIPS/eip-6093[ERC-6093] custom errors for ERC20 tokens.\\n */\\ninterface IERC20Errors {\\n    /**\\n     * @dev Indicates an error related to the current `balance` of a `sender`. Used in transfers.\\n     * @param sender Address whose tokens are being transferred.\\n     * @param balance Current balance for the interacting account.\\n     * @param needed Minimum amount required to perform a transfer.\\n     */\\n    error ERC20InsufficientBalance(address sender, uint256 balance, uint256 needed);\\n\\n    /**\\n     * @dev Indicates a failure with the token `sender`. Used in transfers.\\n     * @param sender Address whose tokens are being transferred.\\n     */\\n    error ERC20InvalidSender(address sender);\\n\\n    /**\\n     * @dev Indicates a failure with the token `receiver`. Used in transfers.\\n     * @param receiver Address to which tokens are being transferred.\\n     */\\n    error ERC20InvalidReceiver(address receiver);\\n\\n    /**\\n     * @dev Indicates a failure with the `spender`\\u2019s `allowance`. Used in transfers.\\n     * @param spender Address that may be allowed to operate on tokens without being their owner.\\n     * @param allowance Amount of tokens a `spender` is allowed to operate with.\\n     * @param needed Minimum amount required to perform a transfer.\\n     */\\n    error ERC20InsufficientAllowance(address spender, uint256 allowance, uint256 needed);\\n\\n    /**\\n     * @dev Indicates a failure with the `approver` of a token to be approved. Used in approvals.\\n     * @param approver Address initiating an approval operation.\\n     */\\n    error ERC20InvalidApprover(address approver);\\n\\n    /**\\n     * @dev Indicates a failure with the `spender` to be approved. Used in approvals.\\n     * @param spender Address that may be allowed to operate on tokens without being their owner.\\n     */\\n    error ERC20InvalidSpender(address spender);\\n}\\n\\n/**\\n * @dev Standard ERC721 Errors\\n * Interface of the https://eips.ethereum.org/EIPS/eip-6093[ERC-6093] custom errors for ERC721 tokens.\\n */\\ninterface IERC721Errors {\\n    /**\\n     * @dev Indicates that an address can't be an owner. For example, `address(0)` is a forbidden owner in EIP-20.\\n     * Used in balance queries.\\n     * @param owner Address of the current owner of a token.\\n     */\\n    error ERC721InvalidOwner(address owner);\\n\\n    /**\\n     * @dev Indicates a `tokenId` whose `owner` is the zero address.\\n     * @param tokenId Identifier number of a token.\\n     */\\n    error ERC721NonexistentToken(uint256 tokenId);\\n\\n    /**\\n     * @dev Indicates an error related to the ownership over a particular token. Used in transfers.\\n     * @param sender Address whose tokens are being transferred.\\n     * @param tokenId Identifier number of a token.\\n     * @param owner Address of the current owner of a token.\\n     */\\n    error ERC721IncorrectOwner(address sender, uint256 tokenId, address owner);\\n\\n    /**\\n     * @dev Indicates a failure with the token `sender`. Used in transfers.\\n     * @param sender Address whose tokens are being transferred.\\n     */\\n    error ERC721InvalidSender(address sender);\\n\\n    /**\\n     * @dev Indicates a failure with the token `receiver`. Used in transfers.\\n     * @param receiver Address to which tokens are being transferred.\\n     */\\n    error ERC721InvalidReceiver(address receiver);\\n\\n    /**\\n     * @dev Indicates a failure with the `operator`\\u2019s approval. Used in transfers.\\n     * @param operator Address that may be allowed to operate on tokens without being their owner.\\n     * @param tokenId Identifier number of a token.\\n     */\\n    error ERC721InsufficientApproval(address operator, uint256 tokenId);\\n\\n    /**\\n     * @dev Indicates a failure with the `approver` of a token to be approved. Used in approvals.\\n     * @param approver Address initiating an approval operation.\\n     */\\n    error ERC721InvalidApprover(address approver);\\n\\n    /**\\n     * @dev Indicates a failure with the `operator` to be approved. Used in approvals.\\n     * @param operator Address that may be allowed to operate on tokens without being their owner.\\n     */\\n    error ERC721InvalidOperator(address operator);\\n}\\n\\n/**\\n * @dev Standard ERC1155 Errors\\n * Interface of the https://eips.ethereum.org/EIPS/eip-6093[ERC-6093] custom errors for ERC1155 tokens.\\n */\\ninterface IERC1155Errors {\\n    /**\\n     * @dev Indicates an error related to the current `balance` of a `sender`. Used in transfers.\\n     * @param sender Address whose tokens are being transferred.\\n     * @param balance Current balance for the interacting account.\\n     * @param needed Minimum amount required to perform a transfer.\\n     * @param tokenId Identifier number of a token.\\n     */\\n    error ERC1155InsufficientBalance(address sender, uint256 balance, uint256 needed, uint256 tokenId);\\n\\n    /**\\n     * @dev Indicates a failure with the token `sender`. Used in transfers.\\n     * @param sender Address whose tokens are being transferred.\\n     */\\n    error ERC1155InvalidSender(address sender);\\n\\n    /**\\n     * @dev Indicates a failure with the token `receiver`. Used in transfers.\\n     * @param receiver Address to which tokens are being transferred.\\n     */\\n    error ERC1155InvalidReceiver(address receiver);\\n\\n    /**\\n     * @dev Indicates a failure with the `operator`\\u2019s approval. Used in transfers.\\n     * @param operator Address that may be allowed to operate on tokens without being their owner.\\n     * @param owner Address of the current owner of a token.\\n     */\\n    error ERC1155MissingApprovalForAll(address operator, address owner);\\n\\n    /**\\n     * @dev Indicates a failure with the `approver` of a token to be approved. Used in approvals.\\n     * @param approver Address initiating an approval operation.\\n     */\\n    error ERC1155InvalidApprover(address approver);\\n\\n    /**\\n     * @dev Indicates a failure with the `operator` to be approved. Used in approvals.\\n     * @param operator Address that may be allowed to operate on tokens without being their owner.\\n     */\\n    error ERC1155InvalidOperator(address operator);\\n\\n    /**\\n     * @dev Indicates an array length mismatch between ids and values in a safeBatchTransferFrom operation.\\n     * Used in batch transfers.\\n     * @param idsLength Length of the array of token identifiers\\n     * @param valuesLength Length of the array of token amounts\\n     */\\n    error ERC1155InvalidArrayLength(uint256 idsLength, uint256 valuesLength);\\n}\\n\",\"keccak256\":\"0x60c65f701957fdd6faea1acb0bb45825791d473693ed9ecb34726fdfaa849dd7\",\"license\":\"MIT\"},\"@openzeppelin/contracts/token/ERC20/ERC20.sol\":{\"content\":\"// SPDX-License-Identifier: MIT\\n// OpenZeppelin Contracts (last updated v5.0.0) (token/ERC20/ERC20.sol)\\n\\npragma solidity ^0.8.20;\\n\\nimport {IERC20} from \\\"./IERC20.sol\\\";\\nimport {IERC20Metadata} from \\\"./extensions/IERC20Metadata.sol\\\";\\nimport {Context} from \\\"../../utils/Context.sol\\\";\\nimport {IERC20Errors} from \\\"../../interfaces/draft-IERC6093.sol\\\";\\n\\n/**\\n * @dev Implementation of the {IERC20} interface.\\n *\\n * This implementation is agnostic to the way tokens are created. This means\\n * that a supply mechanism has to be added in a derived contract using {_mint}.\\n *\\n * TIP: For a detailed writeup see our guide\\n * https://forum.openzeppelin.com/t/how-to-implement-erc20-supply-mechanisms/226[How\\n * to implement supply mechanisms].\\n *\\n * The default value of {decimals} is 18. To change this, you should override\\n * this function so it returns a different value.\\n *\\n * We have followed general OpenZeppelin Contracts guidelines: functions revert\\n * instead returning `false` on failure. This behavior is nonetheless\\n * conventional and does not conflict with the expectations of ERC20\\n * applications.\\n *\\n * Additionally, an {Approval} event is emitted on calls to {transferFrom}.\\n * This allows applications to reconstruct the allowance for all accounts just\\n * by listening to said events. Other implementations of the EIP may not emit\\n * these events, as it isn't required by the specification.\\n */\\nabstract contract ERC20 is Context, IERC20, IERC20Metadata, IERC20Errors {\\n    mapping(address account => uint256) private _balances;\\n\\n    mapping(address account => mapping(address spender => uint256)) private _allowances;\\n\\n    uint256 private _totalSupply;\\n\\n    string private _name;\\n    string private _symbol;\\n\\n    /**\\n     * @dev Sets the values for {name} and {symbol}.\\n     *\\n     * All two of these values are immutable: they can only be set once during\\n     * construction.\\n     */\\n    constructor(string memory name_, string memory symbol_) {\\n        _name = name_;\\n        _symbol = symbol_;\\n    }\\n\\n    /**\\n     * @dev Returns the name of the token.\\n     */\\n    function name() public view virtual returns (string memory) {\\n        return _name;\\n    }\\n\\n    /**\\n     * @dev Returns the symbol of the token, usually a shorter version of the\\n     * name.\\n     */\\n    function symbol() public view virtual returns (string memory) {\\n        return _symbol;\\n    }\\n\\n    /**\\n     * @dev Returns the number of decimals used to get its user representation.\\n     * For example, if `decimals` equals `2`, a balance of `505` tokens should\\n     * be displayed to a user as `5.05` (`505 / 10 ** 2`).\\n     *\\n     * Tokens usually opt for a value of 18, imitating the relationship between\\n     * Ether and Wei. This is the default value returned by this function, unless\\n     * it's overridden.\\n     *\\n     * NOTE: This information is only used for _display_ purposes: it in\\n     * no way affects any of the arithmetic of the contract, including\\n     * {IERC20-balanceOf} and {IERC20-transfer}.\\n     */\\n    function decimals() public view virtual returns (uint8) {\\n        return 18;\\n    }\\n\\n    /**\\n     * @dev See {IERC20-totalSupply}.\\n     */\\n    function totalSupply() public view virtual returns (uint256) {\\n        return _totalSupply;\\n    }\\n\\n    /**\\n     * @dev See {IERC20-balanceOf}.\\n     */\\n    function balanceOf(address account) public view virtual returns (uint256) {\\n        return _balances[account];\\n    }\\n\\n    /**\\n     * @dev See {IERC20-transfer}.\\n     *\\n     * Requirements:\\n     *\\n     * - `to` cannot be the zero address.\\n     * - the caller must have a balance of at least `value`.\\n     */\\n    function transfer(address to, uint256 value) public virtual returns (bool) {\\n        address owner = _msgSender();\\n        _transfer(owner, to, value);\\n        return true;\\n    }\\n\\n    /**\\n     * @dev See {IERC20-allowance}.\\n     */\\n    function allowance(address owner, address spender) public view virtual returns (uint256) {\\n        return _allowances[owner][spender];\\n    }\\n\\n    /**\\n     * @dev See {IERC20-approve}.\\n     *\\n     * NOTE: If `value` is the maximum `uint256`, the allowance is not updated on\\n     * `transferFrom`. This is semantically equivalent to an infinite approval.\\n     *\\n     * Requirements:\\n     *\\n     * - `spender` cannot be the zero address.\\n     */\\n    function approve(address spender, uint256 value) public virtual returns (bool) {\\n        address owner = _msgSender();\\n        _approve(owner, spender, value);\\n        return true;\\n    }\\n\\n    /**\\n     * @dev See {IERC20-transferFrom}.\\n     *\\n     * Emits an {Approval} event indicating the updated allowance. This is not\\n     * required by the EIP. See the note at the beginning of {ERC20}.\\n     *\\n     * NOTE: Does not update the allowance if the current allowance\\n     * is the maximum `uint256`.\\n     *\\n     * Requirements:\\n     *\\n     * - `from` and `to` cannot be the zero address.\\n     * - `from` must have a balance of at least `value`.\\n     * - the caller must have allowance for ``from``'s tokens of at least\\n     * `value`.\\n     */\\n    function transferFrom(address from, address to, uint256 value) public virtual returns (bool) {\\n        address spender = _msgSender();\\n        _spendAllowance(from, spender, value);\\n        _transfer(from, to, value);\\n        return true;\\n    }\\n\\n    /**\\n     * @dev Moves a `value` amount of tokens from `from` to `to`.\\n     *\\n     * This internal function is equivalent to {transfer}, and can be used to\\n     * e.g. implement automatic token fees, slashing mechanisms, etc.\\n     *\\n     * Emits a {Transfer} event.\\n     *\\n     * NOTE: This function is not virtual, {_update} should be overridden instead.\\n     */\\n    function _transfer(address from, address to, uint256 value) internal {\\n        if (from == address(0)) {\\n            revert ERC20InvalidSender(address(0));\\n        }\\n        if (to == address(0)) {\\n            revert ERC20InvalidReceiver(address(0));\\n        }\\n        _update(from, to, value);\\n    }\\n\\n    /**\\n     * @dev Transfers a `value` amount of tokens from `from` to `to`, or alternatively mints (or burns) if `from`\\n     * (or `to`) is the zero address. All customizations to transfers, mints, and burns should be done by overriding\\n     * this function.\\n     *\\n     * Emits a {Transfer} event.\\n     */\\n    function _update(address from, address to, uint256 value) internal virtual {\\n        if (from == address(0)) {\\n            // Overflow check required: The rest of the code assumes that totalSupply never overflows\\n            _totalSupply += value;\\n        } else {\\n            uint256 fromBalance = _balances[from];\\n            if (fromBalance < value) {\\n                revert ERC20InsufficientBalance(from, fromBalance, value);\\n            }\\n            unchecked {\\n                // Overflow not possible: value <= fromBalance <= totalSupply.\\n                _balances[from] = fromBalance - value;\\n            }\\n        }\\n\\n        if (to == address(0)) {\\n            unchecked {\\n                // Overflow not possible: value <= totalSupply or value <= fromBalance <= totalSupply.\\n                _totalSupply -= value;\\n            }\\n        } else {\\n            unchecked {\\n                // Overflow not possible: balance + value is at most totalSupply, which we know fits into a uint256.\\n                _balances[to] += value;\\n            }\\n        }\\n\\n        emit Transfer(from, to, value);\\n    }\\n\\n    /**\\n     * @dev Creates a `value` amount of tokens and assigns them to `account`, by transferring it from address(0).\\n     * Relies on the `_update` mechanism\\n     *\\n     * Emits a {Transfer} event with `from` set to the zero address.\\n     *\\n     * NOTE: This function is not virtual, {_update} should be overridden instead.\\n     */\\n    function _mint(address account, uint256 value) internal {\\n        if (account == address(0)) {\\n            revert ERC20InvalidReceiver(address(0));\\n        }\\n        _update(address(0), account, value);\\n    }\\n\\n    /**\\n     * @dev Destroys a `value` amount of tokens from `account`, lowering the total supply.\\n     * Relies on the `_update` mechanism.\\n     *\\n     * Emits a {Transfer} event with `to` set to the zero address.\\n     *\\n     * NOTE: This function is not virtual, {_update} should be overridden instead\\n     */\\n    function _burn(address account, uint256 value) internal {\\n        if (account == address(0)) {\\n            revert ERC20InvalidSender(address(0));\\n        }\\n        _update(account, address(0), value);\\n    }\\n\\n    /**\\n     * @dev Sets `value` as the allowance of `spender` over the `owner` s tokens.\\n     *\\n     * This internal function is equivalent to `approve`, and can be used to\\n     * e.g. set automatic allowances for certain subsystems, etc.\\n     *\\n     * Emits an {Approval} event.\\n     *\\n     * Requirements:\\n     *\\n     * - `owner` cannot be the zero address.\\n     * - `spender` cannot be the zero address.\\n     *\\n     * Overrides to this logic should be done to the variant with an additional `bool emitEvent` argument.\\n     */\\n    function _approve(address owner, address spender, uint256 value) internal {\\n        _approve(owner, spender, value, true);\\n    }\\n\\n    /**\\n     * @dev Variant of {_approve} with an optional flag to enable or disable the {Approval} event.\\n     *\\n     * By default (when calling {_approve}) the flag is set to true. On the other hand, approval changes made by\\n     * `_spendAllowance` during the `transferFrom` operation set the flag to false. This saves gas by not emitting any\\n     * `Approval` event during `transferFrom` operations.\\n     *\\n     * Anyone who wishes to continue emitting `Approval` events on the`transferFrom` operation can force the flag to\\n     * true using the following override:\\n     * ```\\n     * function _approve(address owner, address spender, uint256 value, bool) internal virtual override {\\n     *     super._approve(owner, spender, value, true);\\n     * }\\n     * ```\\n     *\\n     * Requirements are the same as {_approve}.\\n     */\\n    function _approve(address owner, address spender, uint256 value, bool emitEvent) internal virtual {\\n        if (owner == address(0)) {\\n            revert ERC20InvalidApprover(address(0));\\n        }\\n        if (spender == address(0)) {\\n            revert ERC20InvalidSpender(address(0));\\n        }\\n        _allowances[owner][spender] = value;\\n        if (emitEvent) {\\n            emit Approval(owner, spender, value);\\n        }\\n    }\\n\\n    /**\\n     * @dev Updates `owner` s allowance for `spender` based on spent `value`.\\n     *\\n     * Does not update the allowance value in case of infinite allowance.\\n     * Revert if not enough allowance is available.\\n     *\\n     * Does not emit an {Approval} event.\\n     */\\n    function _spendAllowance(address owner, address spender, uint256 value) internal virtual {\\n        uint256 currentAllowance = allowance(owner, spender);\\n        if (currentAllowance != type(uint256).max) {\\n            if (currentAllowance < value) {\\n                revert ERC20InsufficientAllowance(spender, currentAllowance, value);\\n            }\\n            unchecked {\\n                _approve(owner, spender, currentAllowance - value, false);\\n            }\\n        }\\n    }\\n}\\n\",\"keccak256\":\"0xc3e1fa9d1987f8d349dfb4d6fe93bf2ca014b52ba335cfac30bfe71e357e6f80\",\"license\":\"MIT\"},\"@openzeppelin/contracts/token/ERC20/IERC20.sol\":{\"content\":\"// SPDX-License-Identifier: MIT\\n// OpenZeppelin Contracts (last updated v5.0.0) (token/ERC20/IERC20.sol)\\n\\npragma solidity ^0.8.20;\\n\\n/**\\n * @dev Interface of the ERC20 standard as defined in the EIP.\\n */\\ninterface IERC20 {\\n    /**\\n     * @dev Emitted when `value` tokens are moved from one account (`from`) to\\n     * another (`to`).\\n     *\\n     * Note that `value` may be zero.\\n     */\\n    event Transfer(address indexed from, address indexed to, uint256 value);\\n\\n    /**\\n     * @dev Emitted when the allowance of a `spender` for an `owner` is set by\\n     * a call to {approve}. `value` is the new allowance.\\n     */\\n    event Approval(address indexed owner, address indexed spender, uint256 value);\\n\\n    /**\\n     * @dev Returns the value of tokens in existence.\\n     */\\n    function totalSupply() external view returns (uint256);\\n\\n    /**\\n     * @dev Returns the value of tokens owned by `account`.\\n     */\\n    function balanceOf(address account) external view returns (uint256);\\n\\n    /**\\n     * @dev Moves a `value` amount of tokens from the caller's account to `to`.\\n     *\\n     * Returns a boolean value indicating whether the operation succeeded.\\n     *\\n     * Emits a {Transfer} event.\\n     */\\n    function transfer(address to, uint256 value) external returns (bool);\\n\\n    /**\\n     * @dev Returns the remaining number of tokens that `spender` will be\\n     * allowed to spend on behalf of `owner` through {transferFrom}. This is\\n     * zero by default.\\n     *\\n     * This value changes when {approve} or {transferFrom} are called.\\n     */\\n    function allowance(address owner, address spender) external view returns (uint256);\\n\\n    /**\\n     * @dev Sets a `value` amount of tokens as the allowance of `spender` over the\\n     * caller's tokens.\\n     *\\n     * Returns a boolean value indicating whether the operation succeeded.\\n     *\\n     * IMPORTANT: Beware that changing an allowance with this method brings the risk\\n     * that someone may use both the old and the new allowance by unfortunate\\n     * transaction ordering. One possible solution to mitigate this race\\n     * condition is to first reduce the spender's allowance to 0 and set the\\n     * desired value afterwards:\\n     * https://github.com/ethereum/EIPs/issues/20#issuecomment-263524729\\n     *\\n     * Emits an {Approval} event.\\n     */\\n    function approve(address spender, uint256 value) external returns (bool);\\n\\n    /**\\n     * @dev Moves a `value` amount of tokens from `from` to `to` using the\\n     * allowance mechanism. `value` is then deducted from the caller's\\n     * allowance.\\n     *\\n     * Returns a boolean value indicating whether the operation succeeded.\\n     *\\n     * Emits a {Transfer} event.\\n     */\\n    function transferFrom(address from, address to, uint256 value) external returns (bool);\\n}\\n\",\"keccak256\":\"0xc6a8ff0ea489379b61faa647490411b80102578440ab9d84e9a957cc12164e70\",\"license\":\"MIT\"},\"@openzeppelin/contracts/token/ERC20/extensions/IERC20Metadata.sol\":{\"content\":\"// SPDX-License-Identifier: MIT\\n// OpenZeppelin Contracts (last updated v5.0.0) (token/ERC20/extensions/IERC20Metadata.sol)\\n\\npragma solidity ^0.8.20;\\n\\nimport {IERC20} from \\\"../IERC20.sol\\\";\\n\\n/**\\n * @dev Interface for the optional metadata functions from the ERC20 standard.\\n */\\ninterface IERC20Metadata is IERC20 {\\n    /**\\n     * @dev Returns the name of the token.\\n     */\\n    function name() external view returns (string memory);\\n\\n    /**\\n     * @dev Returns the symbol of the token.\\n     */\\n    function symbol() external view returns (string memory);\\n\\n    /**\\n     * @dev Returns the decimals places of the token.\\n     */\\n    function decimals() external view returns (uint8);\\n}\\n\",\"keccak256\":\"0xaa761817f6cd7892fcf158b3c776b34551cde36f48ff9703d53898bc45a94ea2\",\"license\":\"MIT\"},\"@openzeppelin/contracts/utils/Context.sol\":{\"content\":\"// SPDX-License-Identifier: MIT\\n// OpenZeppelin Contracts (last updated v5.0.1) (utils/Context.sol)\\n\\npragma solidity ^0.8.20;\\n\\n/**\\n * @dev Provides information about the current execution context, including the\\n * sender of the transaction and its data. While these are generally available\\n * via msg.sender and msg.data, they should not be accessed in such a direct\\n * manner, since when dealing with meta-transactions the account sending and\\n * paying for execution may not be the actual sender (as far as an application\\n * is concerned).\\n *\\n * This contract is only required for intermediate, library-like contracts.\\n */\\nabstract contract Context {\\n    function _msgSender() internal view virtual returns (address) {\\n        return msg.sender;\\n    }\\n\\n    function _msgData() internal view virtual returns (bytes calldata) {\\n        return msg.data;\\n    }\\n\\n    function _contextSuffixLength() internal view virtual returns (uint256) {\\n        return 0;\\n    }\\n}\\n\",\"keccak256\":\"0x493033a8d1b176a037b2cc6a04dad01a5c157722049bbecf632ca876224dd4b2\",\"license\":\"MIT\"},\"contracts/01_Staking/OracleToken.sol\":{\"content\":\"// SPDX-License-Identifier: MIT\\npragma solidity >=0.8.0 <0.9.0;\\n\\nimport \\\"@openzeppelin/contracts/token/ERC20/ERC20.sol\\\";\\nimport \\\"@openzeppelin/contracts/access/Ownable.sol\\\";\\n\\ncontract ORA is ERC20, Ownable {\\n    //////////////////\\n    /// Constants ////\\n    //////////////////\\n\\n    // 0.5 ETH = 100 ORA  =>  1 ETH = 200 ORA (18 decimals)\\n    uint256 public constant ORA_PER_ETH = 200;\\n\\n    //////////////////////\\n    /// State Variables //\\n    //////////////////////\\n\\n    ////////////////\\n    /// Events /////\\n    ////////////////\\n\\n    event OraPurchased(address indexed buyer, uint256 ethIn, uint256 oraOut);\\n    event EthWithdrawn(address indexed to, uint256 amount);\\n\\n    /////////////////\\n    /// Errors //////\\n    /////////////////\\n\\n    error EthTransferFailed();\\n\\n    constructor() ERC20(\\\"Oracle Token\\\", \\\"ORA\\\") Ownable(msg.sender) {\\n        // Mint initial supply to the contract deployer\\n        _mint(msg.sender, 1000000000000 ether);\\n    }\\n\\n    function mint(address to, uint256 amount) public onlyOwner {\\n        _mint(to, amount);\\n    }\\n\\n    function burn(uint256 amount) public {\\n        _burn(msg.sender, amount);\\n    }\\n\\n    /**\\n     * @notice Buy ORA at a fixed rate by sending ETH. Mints directly to the buyer.\\n     */\\n    receive() external payable {\\n        _buy(msg.sender);\\n    }\\n\\n    function buy() external payable {\\n        _buy(msg.sender);\\n    }\\n\\n    function quoteOra(uint256 ethAmountWei) public pure returns (uint256) {\\n        return ethAmountWei * ORA_PER_ETH;\\n    }\\n\\n    function _buy(address buyer) internal {\\n        uint256 oraOut = quoteOra(msg.value);\\n        _mint(buyer, oraOut);\\n        emit OraPurchased(buyer, msg.value, oraOut);\\n    }\\n}\\n\",\"keccak256\":\"0x2ee0f87bb25d27ddb88d46ae2fb7099fc9dd1e304546097fb083fabb5e7773b9\",\"license\":\"MIT\"},\"contracts/01_Staking/StakingOracle.sol\":{\"content\":\"// SPDX-License-Identifier: MIT\\npragma solidity >=0.8.0 <0.9.0;\\n\\nimport { ORA } from \\\"./OracleToken.sol\\\";\\nimport { StatisticsUtils } from \\\"../utils/StatisticsUtils.sol\\\";\\n\\ncontract StakingOracle {\\n    using StatisticsUtils for uint256[];\\n\\n    /////////////////\\n    /// Errors //////\\n    /////////////////\\n\\n    error NodeNotRegistered();\\n    error InsufficientStake();\\n    error NodeAlreadyRegistered();\\n    error NoRewardsAvailable();\\n    error OnlyPastBucketsAllowed();\\n    error NodeAlreadySlashed();\\n    error AlreadyReportedInCurrentBucket();\\n    error NotDeviated();\\n    error WaitingPeriodNotOver();\\n    error InvalidPrice();\\n    error IndexOutOfBounds();\\n    error NodeNotAtGivenIndex();\\n    error TransferFailed();\\n    error MedianNotRecorded();\\n    error BucketMedianAlreadyRecorded();\\n    error NodeDidNotReport();\\n\\n    //////////////////////\\n    /// State Variables //\\n    //////////////////////\\n\\n    ORA public oracleToken;\\n\\n    struct OracleNode {\\n        uint256 stakedAmount;\\n        uint256 lastReportedBucket;\\n        uint256 reportCount;\\n        uint256 claimedReportCount;\\n        uint256 firstBucket; // block when node registered\\n        bool active;\\n    }\\n\\n    struct BlockBucket {\\n        mapping(address => bool) slashedOffenses;\\n        address[] reporters;\\n        uint256[] prices;\\n        uint256 medianPrice;\\n    }\\n\\n\\n    mapping(address => OracleNode) public nodes;\\n    mapping(uint256 => BlockBucket) public blockBuckets; // one bucket per 24 blocks\\n    address[] public nodeAddresses;\\n\\n    uint256 public constant MINIMUM_STAKE = 100 ether;\\n    uint256 public constant BUCKET_WINDOW = 24; // 24 blocks\\n    uint256 public constant SLASHER_REWARD_PERCENTAGE = 10;\\n    uint256 public constant REWARD_PER_REPORT = 1 ether; // ORA Token reward per report\\n    uint256 public constant INACTIVITY_PENALTY = 1 ether;\\n    uint256 public constant MISREPORT_PENALTY = 100 ether;\\n    uint256 public constant MAX_DEVIATION_BPS = 1000; // 10% default threshold\\n    uint256 public constant WAITING_PERIOD = 2; // 2 buckets after last report before exit allowed\\n\\n    ////////////////\\n    /// Events /////\\n    ////////////////\\n\\n    event NodeRegistered(address indexed node, uint256 stakedAmount);\\n    event PriceReported(address indexed node, uint256 price, uint256 bucketNumber);\\n    event BucketMedianRecorded(uint256 indexed bucketNumber, uint256 medianPrice);\\n    event NodeSlashed(address indexed node, uint256 amount);\\n    event NodeRewarded(address indexed node, uint256 amount);\\n    event StakeAdded(address indexed node, uint256 amount);\\n    event NodeExited(address indexed node, uint256 amount);\\n\\n    ///////////////////\\n    /// Modifiers /////\\n    ///////////////////\\n\\n    /**\\n     * @notice Modifier to restrict function access to registered oracle nodes\\n     * @dev Checks if the sender has a registered node in the mapping\\n     */\\n    modifier onlyNode() {\\n        if (nodes[msg.sender].active == false) revert NodeNotRegistered();\\n        _;\\n    }\\n\\n    ///////////////////\\n    /// Constructor ///\\n    ///////////////////\\n\\n    constructor(address oraTokenAddress) {\\n        oracleToken = ORA(payable(oraTokenAddress));\\n    }\\n\\n    ///////////////////\\n    /// Functions /////\\n    ///////////////////\\n\\n    /**\\n     * @notice Registers a new oracle node with initial ORA token stake\\n     * @dev Creates a new OracleNode struct and adds the sender to the nodeAddresses array.\\n     *      Requires minimum stake amount and prevents duplicate registrations.\\n     */\\n    function registerNode(uint256 amount) public {\\n        if (nodes[msg.sender].active) revert NodeAlreadyRegistered();\\n        if (amount < MINIMUM_STAKE) revert InsufficientStake();\\n        // Transfer ORA tokens from the node to the contract as stake\\n        bool success = oracleToken.transferFrom(msg.sender, address(this), amount);\\n        if (!success) revert TransferFailed();\\n        // Create the node and add to the mapping and addresses array\\n        nodes[msg.sender] = OracleNode({\\n            stakedAmount: amount,\\n            lastReportedBucket: 0,\\n            reportCount: 0,\\n            claimedReportCount: 0,\\n            firstBucket: getCurrentBucketNumber(),\\n            active: true\\n        });\\n\\n        nodeAddresses.push(msg.sender);\\n        emit NodeRegistered(msg.sender, amount);\\n    }\\n\\n    /**\\n     * @notice Updates the price reported by an oracle node (only registered nodes)\\n     * @dev Updates the node's lastReportedBucket and price in that bucket. Requires sufficient stake.\\n     * @param price The new price value to report\\n     */\\n    function reportPrice(uint256 price) public onlyNode {\\n        if (price == 0) revert InvalidPrice();\\n        if (getEffectiveStake(msg.sender) < MINIMUM_STAKE) revert InsufficientStake();\\n        uint256 currentBucket = getCurrentBucketNumber();\\n        OracleNode storage node = nodes[msg.sender];\\n        if (node.lastReportedBucket == currentBucket) revert AlreadyReportedInCurrentBucket();\\n        \\n        BlockBucket storage bucket = blockBuckets[currentBucket];\\n        bucket.reporters.push(msg.sender);\\n        bucket.prices.push(price);\\n\\n        node.lastReportedBucket = currentBucket;\\n        node.reportCount += 1;\\n\\n        emit PriceReported(msg.sender, price, currentBucket);\\n    }\\n\\n    /**\\n     * @notice Allows active and inactive nodes to claim accumulated ORA token rewards\\n     * @dev Calculates rewards based on time elapsed since last claim.\\n     */\\n    function claimReward() public {\\n        OracleNode storage node = nodes[msg.sender];\\n\\n        uint256 delta = node.reportCount - node.claimedReportCount;\\n        if (delta == 0) revert NoRewardsAvailable();\\n\\n        node.claimedReportCount = node.reportCount;\\n        uint256 reward = delta * REWARD_PER_REPORT;\\n        // bool success = oracleToken.transfer(msg.sender, reward);\\n        // if(!success) revert TransferFailed();\\n        oracleToken.mint(msg.sender, reward);\\n\\n        emit NodeRewarded(msg.sender, reward);\\n\\n    }\\n\\n    /**\\n     * @notice Allows a registered node to increase its ORA token stake\\n     */\\n    function addStake(uint256 amount) public onlyNode {\\n         if (amount == 0) revert InsufficientStake();\\n\\n         bool success = oracleToken.transferFrom(msg.sender, address(this), amount);\\n         if (!success) revert TransferFailed();\\n\\n         nodes[msg.sender].stakedAmount += amount;\\n         emit StakeAdded(msg.sender, amount);\\n    }\\n\\n    /**\\n     * @notice Records the median price for a bucket once sufficient reports are available\\n     * @dev Anyone who uses the oracle's price feed can call this function to record the median price for a bucket.\\n     * @param bucketNumber The bucket number to finalize\\n     */\\n    function recordBucketMedian(uint256 bucketNumber) public {\\n        if (bucketNumber >= getCurrentBucketNumber()) revert OnlyPastBucketsAllowed();\\n        BlockBucket storage bucket = blockBuckets[bucketNumber];\\n        if(bucket.medianPrice !=0) revert BucketMedianAlreadyRecorded(); // prevent overwriting median once recorded \\n        if(bucket.prices.length == 0) revert NodeDidNotReport();\\n\\n        uint256[] memory prices = bucket.prices;\\n        prices.sort();\\n        bucket.medianPrice = prices.getMedian();\\n\\n        emit BucketMedianRecorded(bucketNumber, bucket.medianPrice); \\n    }\\n\\n    /**\\n     * @notice Slashes a node for giving a price that is deviated too far from the average\\n     * @param nodeToSlash The address of the node to slash\\n     * @param bucketNumber The bucket number to slash the node from\\n     * @param reportIndex The index of node in the prices and reporters arrays\\n     * @param nodeAddressesIndex The index of the node to slash in the nodeAddresses array\\n     */\\n    function slashNode(\\n        address nodeToSlash,\\n        uint256 bucketNumber,\\n        uint256 reportIndex,\\n        uint256 nodeAddressesIndex\\n    ) public {\\n        if (!nodes[nodeToSlash].active) revert NodeNotRegistered();\\n        if (bucketNumber >= getCurrentBucketNumber()) revert OnlyPastBucketsAllowed();\\n        \\n        BlockBucket storage bucket = blockBuckets[bucketNumber];\\n        if (bucket.medianPrice == 0) revert MedianNotRecorded();\\n        if (bucket.slashedOffenses[nodeToSlash]) revert NodeAlreadySlashed();\\n        if (reportIndex >= bucket.reporters.length) revert IndexOutOfBounds();\\n        if (nodeToSlash != bucket.reporters[reportIndex]) revert NodeNotAtGivenIndex();\\n\\n        uint256 reportedPrice = bucket.prices[reportIndex];\\n        if (reportedPrice == 0) revert NodeDidNotReport();\\n        if (!_checkPriceDeviated(reportedPrice, bucket.medianPrice)) revert NotDeviated();\\n\\n        bucket.slashedOffenses[nodeToSlash] = true;\\n        OracleNode storage node = nodes[nodeToSlash];\\n\\n        uint256 penaltyAmount = MISREPORT_PENALTY > node.stakedAmount ? node.stakedAmount : MISREPORT_PENALTY;\\n        node.stakedAmount -= penaltyAmount;\\n\\n        if (node.stakedAmount == 0) {\\n            _removeNode(nodeToSlash, nodeAddressesIndex);\\n            emit NodeExited(nodeToSlash, 0);\\n        }\\n\\n        uint256 rewardAmount = (penaltyAmount * SLASHER_REWARD_PERCENTAGE) / 100;\\n\\n        bool success = oracleToken.transfer(msg.sender, rewardAmount);\\n        if (!success) revert TransferFailed();\\n\\n        emit NodeSlashed(nodeToSlash, penaltyAmount);\\n\\n    }\\n\\n    /**\\n     * @notice Allows a registered node to exit the system and withdraw their stake\\n     * @dev Removes the node from the system and sends the stake to the node.\\n     *      Requires that the the initial waiting period has passed to ensure the\\n     *      node has been slashed if it reported a bad price before allowing it to exit.\\n     * @param index The index of the node to remove in nodeAddresses\\n     */\\n    function exitNode(uint256 index) public onlyNode {\\n        if (index >= nodeAddresses.length) revert IndexOutOfBounds();\\n        if (nodeAddresses[index] != msg.sender) revert NodeNotAtGivenIndex();\\n        \\n        OracleNode storage node = nodes[msg.sender];\\n       if (getCurrentBucketNumber() < node.lastReportedBucket + WAITING_PERIOD) revert WaitingPeriodNotOver();\\n\\n        uint256 effectiveStake = getEffectiveStake(msg.sender);\\n\\n        _removeNode(nodeAddresses[index], index);\\n        nodes[msg.sender].stakedAmount = 0; // set stake to 0 after removing node to prevent re-entrancy issues\\n\\n        bool success = oracleToken.transfer(msg.sender, effectiveStake);\\n        if (!success) revert TransferFailed();\\n\\n        emit NodeExited(msg.sender, effectiveStake);\\n    }\\n\\n    ////////////////////////\\n    /// View Functions /////\\n    ////////////////////////\\n\\n    /**\\n     * @notice Returns the current bucket number\\n     * @dev Returns the current bucket number based on the block number\\n     * @return The current bucket number\\n     */\\n    function getCurrentBucketNumber() public view returns (uint256) {\\n        return (block.number / BUCKET_WINDOW) + 1;\\n    }\\n\\n    /**\\n     * @notice Returns the list of registered oracle node addresses\\n     * @return Array of registered oracle node addresses\\n     */\\n    function getNodeAddresses() public view returns (address[] memory) {\\n        return nodeAddresses;\\n    }\\n\\n    /**\\n     * @notice Returns the stored median price from the most recently completed bucket\\n     * @dev Requires that the median for the bucket be recorded via recordBucketMedian\\n     * @return The median price for the last finalized bucket\\n     */\\n    function getLatestPrice() public view returns (uint256) {\\n        uint256 latestBucket = getCurrentBucketNumber() - 1;\\n        if (blockBuckets[latestBucket].medianPrice == 0) revert MedianNotRecorded();\\n        \\n        return blockBuckets[latestBucket].medianPrice;\\n    }\\n\\n    /**\\n     * @notice Returns the stored median price from a specified bucket\\n     * @param bucketNumber The bucket number to read the median price from\\n     * @return The median price stored for the bucket\\n     */\\n    function getPastPrice(uint256 bucketNumber) public view returns (uint256) {\\n       // if (bucketNumber >= getCurrentBucketNumber()) revert OnlyPastBucketsAllowed();\\n        if (blockBuckets[bucketNumber].medianPrice == 0) revert MedianNotRecorded();\\n        \\n        return blockBuckets[bucketNumber].medianPrice;\\n    }\\n\\n    /**\\n     * @notice Returns the price and slashed status of a node at a given bucket\\n     * @param nodeAddress The address of the node to get the data for\\n     * @param bucketNumber The bucket number to get the data from\\n     * @return price The price of the node at the specified bucket\\n     * @return slashed The slashed status of the node at the specified bucket\\n     */\\n    function getSlashedStatus(\\n        address nodeAddress,\\n        uint256 bucketNumber\\n    ) public view returns (uint256 price, bool slashed) {\\n        BlockBucket storage bucket = blockBuckets[bucketNumber];\\n        for (uint256 i = 0; i < bucket.reporters.length; i++) {\\n            if (bucket.reporters[i] == nodeAddress) {\\n                price = bucket.prices[i];\\n                slashed = bucket.slashedOffenses[nodeAddress];\\n                return (price, slashed);\\n            }\\n        }\\n       // revert NodeNotRegistered(); // node did not report in this bucket, so consider it not registered for this bucket\\n    }\\n\\n    /**\\n     * @notice Returns the effective stake accounting for inactivity penalties via missed buckets\\n     * @dev Effective stake = stakedAmount - (missedBuckets * INACTIVITY_PENALTY), floored at 0\\n     */\\n    function getEffectiveStake(address nodeAddress) public view returns (uint256) {\\n        OracleNode memory node = nodes[nodeAddress];\\n        if (!node.active) return 0;\\n        uint256 currentBucket = getCurrentBucketNumber();\\n        if (currentBucket== node.firstBucket) return node.stakedAmount; // no penalty in first bucket\\n        uint256 expectedReoportCount = currentBucket - node.firstBucket;\\n        uint256 actualReportCount = node.reportCount;\\n        if (node.lastReportedBucket == currentBucket && actualReportCount > 0) {\\n            actualReportCount -= 1; // don't count current bucket if already reported in it, since it can't be missed\\n        }\\n        \\n        if (actualReportCount >= expectedReoportCount) return node.stakedAmount; // no penalty if node has reported in all expected buckets\\n        uint256 missedBuckets = expectedReoportCount - actualReportCount;\\n        uint256 penalty = missedBuckets * INACTIVITY_PENALTY;\\n        if (penalty >= node.stakedAmount) return 0; // full penalty if penalty exceeds or equals staked amount\\n        return node.stakedAmount - penalty; // effective stake\\n    }\\n\\n    /**\\n     * @notice Returns the addresses of nodes in a bucket whose reported price deviates beyond the threshold\\n     * @param bucketNumber The bucket number to get the outliers from\\n     * @return Array of node addresses considered outliers\\n     */\\n    function getOutlierNodes(uint256 bucketNumber) public view returns (address[] memory) {\\n        BlockBucket storage bucket = blockBuckets[bucketNumber];\\n        if (bucket.medianPrice == 0) revert MedianNotRecorded();\\n\\n        address[] memory outliers = new address[](bucket.reporters.length);\\n        uint256 outlierCount = 0;\\n\\n        for (uint256 i = 0; i < bucket.reporters.length; i++) {\\n            address reporter = bucket.reporters[i];\\n            if (bucket.slashedOffenses[reporter]) continue; // skip already slashed nodes\\n            \\n            uint256 reportedPrice = bucket.prices[i];\\n            if (reportedPrice == 0) continue;\\n\\n            if (_checkPriceDeviated(reportedPrice, bucket.medianPrice)) {\\n                outliers[outlierCount] = bucket.reporters[i];\\n                outlierCount++;\\n            }\\n        }\\n\\n        // Resize the array to the actual number of outliers\\n        assembly {\\n            mstore(outliers, outlierCount)\\n        }\\n        \\n        return outliers;\\n    }\\n\\n    //////////////////////////\\n    /// Internal Functions ///\\n    //////////////////////////\\n\\n    /**\\n     * @notice Removes a node from the nodeAddresses array\\n     * @param nodeAddress The address of the node to remove\\n     * @param index The index of the node to remove\\n     */\\n    function _removeNode(address nodeAddress, uint256 index) internal {\\n        if (index >= nodeAddresses.length) revert IndexOutOfBounds();\\n        if (nodeAddresses[index] != nodeAddress) revert NodeNotAtGivenIndex();\\n\\n        // Move the last element to the index to delete and pop the last element\\n        uint256 lastIndex = nodeAddresses.length - 1;\\n        if (index != lastIndex) {\\n            nodeAddresses[index] = nodeAddresses[lastIndex];\\n        }\\n        nodeAddresses.pop();\\n\\n        nodes[nodeAddress].active = false; // mark node as inactive\\n    }\\n\\n    /**\\n     * @notice Checks if the price deviation is greater than the threshold\\n     * @param reportedPrice The price reported by the node\\n     * @param medianPrice The average price of the bucket\\n     * @return True if the price deviation is greater than the threshold, false otherwise\\n     */\\n    function _checkPriceDeviated(uint256 reportedPrice, uint256 medianPrice) internal pure returns (bool) {\\n        uint256 priceDeviation = reportedPrice > medianPrice ? reportedPrice - medianPrice : medianPrice - reportedPrice;\\n        uint256 deviationBps = (priceDeviation * 10_000) / medianPrice;\\n\\n        return deviationBps > MAX_DEVIATION_BPS;\\n    }\\n}\\n\",\"keccak256\":\"0x46adba1562bd50e04e0ab3de81b2febefc68b84589948af532832a4b44e44990\",\"license\":\"MIT\"},\"contracts/utils/StatisticsUtils.sol\":{\"content\":\"// SPDX-License-Identifier: MIT\\npragma solidity >=0.8.0 <0.9.0;\\n\\nlibrary StatisticsUtils {\\n    /////////////////\\n    /// Errors //////\\n    /////////////////\\n\\n    error EmptyArray();\\n\\n    ///////////////////\\n    /// Functions /////\\n    ///////////////////\\n\\n    /**\\n     * @notice Sorts an array of uint256 values in ascending order using selection sort\\n     * @dev Uses selection sort algorithm which is not gas-efficient but acceptable for small arrays.\\n     *      This implementation mimics the early MakerDAO Medianizer exactly.\\n     *      Modifies the input array in-place.\\n     * @param arr The array of uint256 values to sort in ascending order\\n     */\\n    function sort(uint256[] memory arr) internal pure {\\n        uint256 n = arr.length;\\n        for (uint256 i = 0; i < n; i++) {\\n            uint256 minIndex = i;\\n            for (uint256 j = i + 1; j < n; j++) {\\n                if (arr[j] < arr[minIndex]) {\\n                    minIndex = j;\\n                }\\n            }\\n            if (minIndex != i) {\\n                (arr[i], arr[minIndex]) = (arr[minIndex], arr[i]);\\n            }\\n        }\\n    }\\n\\n    /**\\n     * @notice Calculates the median value from a sorted array of uint256 values\\n     * @dev For arrays with even length, returns the average of the two middle elements.\\n     *      For arrays with odd length, returns the middle element.\\n     *      Assumes the input array is already sorted in ascending order.\\n     * @param arr The sorted array of uint256 values to calculate median from\\n     * @return The median value as a uint256\\n     */\\n    function getMedian(uint256[] memory arr) internal pure returns (uint256) {\\n        uint256 length = arr.length;\\n        if (length == 0) revert EmptyArray();\\n        if (length % 2 == 0) {\\n            return (arr[length / 2 - 1] + arr[length / 2]) / 2;\\n        } else {\\n            return arr[length / 2];\\n        }\\n    }\\n}\\n\",\"keccak256\":\"0xc0949844270a074ee4289211c32b5e33062343fb5ae282c314a944e344e609cc\",\"license\":\"MIT\"}},\"version\":1}",
+  "bytecode": "0x6080604052348015600f57600080fd5b50604051611b33380380611b33833981016040819052602c916050565b600080546001600160a01b0319166001600160a01b0392909216919091179055607e565b600060208284031215606157600080fd5b81516001600160a01b0381168114607757600080fd5b9392505050565b611aa68061008d6000396000f3fe608060405234801561001057600080fd5b506004361061018e5760003560e01c80637f980edf116100de578063b88a802f11610097578063c7f898f011610071578063c7f898f014610386578063eb4f16b514610399578063eecd509a146103ac578063ff24357a146101b957600080fd5b8063b88a802f1461036b578063bd53436914610250578063c4d770901461037357600080fd5b80637f980edf146102ed57806383472fcf146103005780638bc116a21461032b5780638e15f47314610353578063a3cda9d11461035b578063ac9d5d691461036357600080fd5b80632e9498241161014b57806357772d311161012557806357772d311461029c5780636cfcca9c146102af5780636f85c7e4146102c25780637979e0ea146102ca57600080fd5b80632e9498241461025f5780633e07505c14610274578063479c92fe1461028957600080fd5b806302211f5e1461019357806308dbbb03146101b957806311ce06a2146101c9578063189a5a17146101d157806325c6840314610247578063298a9b2014610250575b600080fd5b6101a66101a136600461187f565b6103bf565b6040519081526020015b60405180910390f35b6101a668056bc75e2d6310000081565b6101a66104f1565b6102186101df36600461187f565b60016020819052600091825260409091208054918101546002820154600383015460048401546005909401549293919290919060ff1686565b6040805196875260208701959095529385019290925260608401526080830152151560a082015260c0016101b0565b6101a66103e881565b6101a6670de0b6b3a764000081565b61026761050e565b6040516101b0919061189a565b6102876102823660046118e6565b610570565b005b6102676102973660046118e6565b610785565b6102876102aa3660046118ff565b610927565b6102876102bd3660046118e6565b610c9e565b6101a6600281565b6101a66102d83660046118e6565b60026020526000908152604090206003015481565b6102876102fb3660046118e6565b610dc6565b600054610313906001600160a01b031681565b6040516001600160a01b0390911681526020016101b0565b61033e610339366004611938565b610fc2565b604080519283529015156020830152016101b0565b6101a6611070565b6101a6601881565b6101a6600a81565b6102876110d1565b6103136103813660046118e6565b6111cf565b6102876103943660046118e6565b6111f9565b6102876103a73660046118e6565b611368565b6101a66103ba3660046118e6565b6114b1565b6001600160a01b0381166000908152600160208181526040808420815160c08101835281548152938101549284019290925260028201549083015260038101546060830152600481015460808301526005015460ff16151560a0820181905261042b5750600092915050565b60006104356104f1565b90508160800151810361044a57505192915050565b600082608001518261045c9190611978565b6040840151602085015191925090831480156104785750600081115b1561048b57610488600182611978565b90505b81811061049d57505090519392505050565b60006104a98284611978565b905060006104bf670de0b6b3a76400008361198b565b865190915081106104d857506000979650505050505050565b85516104e5908290611978565b98975050505050505050565b60006104fe6018436119b8565b6105099060016119cc565b905090565b6060600380548060200260200160405190810160405280929190818152602001828054801561056657602002820191906000526020600020905b81546001600160a01b03168152600190910190602001808311610548575b5050505050905090565b3360009081526001602052604081206005015460ff16151590036105a6576040516229eaad60e31b815260040160405180910390fd5b60035481106105c857604051634e23d03560e01b815260040160405180910390fd5b336001600160a01b0316600382815481106105e5576105e56119df565b6000918252602090912001546001600160a01b0316146106185760405163a2f90c8160e01b815260040160405180910390fd5b3360009081526001602081905260409091209081015461063a906002906119cc565b6106426104f1565b101561066157604051630832f48360e21b815260040160405180910390fd5b600061066c336103bf565b905061069f60038481548110610684576106846119df565b6000918252602090912001546001600160a01b0316846114f8565b336000818152600160205260408082208290558154905163a9059cbb60e01b815260048101939093526024830184905290916001600160a01b039091169063a9059cbb906044016020604051808303816000875af1158015610705573d6000803e3d6000fd5b505050506040513d601f19601f8201168201806040525081019061072991906119f5565b905080610749576040516312171d8360e31b815260040160405180910390fd5b60405182815233907ffc3b44de028b3d70241998c7d84e5520785226d0c49d16d2b487735225254b3b906020015b60405180910390a250505050565b60008181526002602052604081206003810154606092036107b957604051630d60e2c560e21b815260040160405180910390fd5b600181015460009067ffffffffffffffff8111156107d9576107d9611a17565b604051908082528060200260200182016040528015610802578160200160208202803683370190505b5090506000805b600184015481101561091d57600084600101828154811061082c5761082c6119df565b60009182526020808320909101546001600160a01b03168083529087905260409091205490915060ff16156108615750610915565b6000856002018381548110610878576108786119df565b9060005260206000200154905080600003610894575050610915565b6108a2818760030154611650565b15610912578560010183815481106108bc576108bc6119df565b9060005260206000200160009054906101000a90046001600160a01b03168585815181106108ec576108ec6119df565b6001600160a01b03909216602092830291909101909101528361090e81611a2d565b9450505b50505b600101610809565b5081529392505050565b6001600160a01b03841660009081526001602052604090206005015460ff16610962576040516229eaad60e31b815260040160405180910390fd5b61096a6104f1565b831061098957604051638de4068d60e01b815260040160405180910390fd5b600083815260026020526040812060038101549091036109bc57604051630d60e2c560e21b815260040160405180910390fd5b6001600160a01b03851660009081526020829052604090205460ff16156109f65760405163640d410760e11b815260040160405180910390fd5b60018101548310610a1a57604051634e23d03560e01b815260040160405180910390fd5b806001018381548110610a2f57610a2f6119df565b6000918252602090912001546001600160a01b03868116911614610a665760405163a2f90c8160e01b815260040160405180910390fd5b6000816002018481548110610a7d57610a7d6119df565b9060005260206000200154905080600003610aab576040516339e78cf960e11b815260040160405180910390fd5b610ab9818360030154611650565b610ad657604051632626606360e11b815260040160405180910390fd5b6001600160a01b038616600090815260208381526040808320805460ff191660019081179091559091528120805490919068056bc75e2d6310000011610b255768056bc75e2d63100000610b28565b81545b905080826000016000828254610b3e9190611978565b90915550508154600003610b9b57610b5688866114f8565b876001600160a01b03167ffc3b44de028b3d70241998c7d84e5520785226d0c49d16d2b487735225254b3b6000604051610b9291815260200190565b60405180910390a25b60006064610baa600a8461198b565b610bb491906119b8565b6000805460405163a9059cbb60e01b81523360048201526024810184905292935090916001600160a01b039091169063a9059cbb906044016020604051808303816000875af1158015610c0b573d6000803e3d6000fd5b505050506040513d601f19601f82011682018060405250810190610c2f91906119f5565b905080610c4f576040516312171d8360e31b815260040160405180910390fd5b896001600160a01b03167f51cf713376ddb1e5f5828bb6aa39d99de812176d62c3d3550bdc4e0b5e86e1a584604051610c8a91815260200190565b60405180910390a250505050505050505050565b610ca66104f1565b8110610cc557604051638de4068d60e01b815260040160405180910390fd5b6000818152600260205260409020600381015415610cf657604051634032e39760e11b815260040160405180910390fd5b6002810154600003610d1b576040516339e78cf960e11b815260040160405180910390fd5b600081600201805480602002602001604051908101604052809291908181526020018280548015610d6b57602002820191906000526020600020905b815481526020019060010190808311610d57575b50505050509050610d7b8161169d565b610d848161178e565b6003830181905560405190815283907fedf992fb93a24d0aa183128c5dfb20a7603592bad3feb0702efa3a65260a2dad906020015b60405180910390a2505050565b3360009081526001602052604090206005015460ff1615610dfa57604051630eb0d31360e11b815260040160405180910390fd5b68056bc75e2d63100000811015610e24576040516378de4a6960e11b815260040160405180910390fd5b600080546040516323b872dd60e01b8152336004820152306024820152604481018490526001600160a01b03909116906323b872dd906064016020604051808303816000875af1158015610e7c573d6000803e3d6000fd5b505050506040513d601f19601f82011682018060405250810190610ea091906119f5565b905080610ec0576040516312171d8360e31b815260040160405180910390fd5b6040518060c00160405280838152602001600081526020016000815260200160008152602001610eee6104f1565b815260016020918201819052336000818152828452604080822086518155868601518186015586820151600282015560608701516003808301919091556080880151600483015560a0909701516005909101805460ff1916911515919091179055855493840186559490527fc2575a0e9e593c00f959f8c92f12db2869c3395a3b0502d05e2516446f71f85b90910180546001600160a01b0319168217905591518481527ff773bca07d020a1bc1fdd45ea3db573da547dd27180143afaf075c158a84759491015b60405180910390a25050565b60008181526002602052604081208190815b600182015481101561106657856001600160a01b0316826001018281548110610fff57610fff6119df565b6000918252602090912001546001600160a01b03160361105e5781600201818154811061102e5761102e6119df565b60009182526020808320909101546001600160a01b038916835293905260409020549193505060ff169050611069565b600101610fd4565b50505b9250929050565b600080600161107d6104f1565b6110879190611978565b600081815260026020526040812060030154919250036110ba57604051630d60e2c560e21b815260040160405180910390fd5b600090815260026020526040902060030154919050565b336000908152600160205260408120600381015460028201549192916110f79190611978565b90508060000361111a5760405163afb0be3360e01b815260040160405180910390fd5b600282015460038301556000611138670de0b6b3a76400008361198b565b6000546040516340c10f1960e01b8152336004820152602481018390529192506001600160a01b0316906340c10f1990604401600060405180830381600087803b15801561118557600080fd5b505af1158015611199573d6000803e3d6000fd5b50506040518381523392507f4ea3e03797614006774acce32832fbaa20d9d69de554df367f4bb8a98b92e7429150602001610db9565b600381815481106111df57600080fd5b6000918252602090912001546001600160a01b0316905081565b3360009081526001602052604081206005015460ff161515900361122f576040516229eaad60e31b815260040160405180910390fd5b8060000361124f5760405162bfc92160e01b815260040160405180910390fd5b68056bc75e2d63100000611262336103bf565b1015611281576040516378de4a6960e11b815260040160405180910390fd5b600061128b6104f1565b33600090815260016020819052604090912090810154919250908290036112c5576040516303309d3f60e11b815260040160405180910390fd5b600082815260026020818152604083206001808201805480830182559086528386200180546001600160a01b031916331790558184018054808301825590865292852090920187905584820186905591840180549293919290919061132b9084906119cc565b9091555050604080518581526020810185905233917f9e595d16d532e4b0dee9420e99a1a4c9862cfdb004a5d369e9695880daf6d3e09101610777565b3360009081526001602052604081206005015460ff161515900361139e576040516229eaad60e31b815260040160405180910390fd5b806000036113bf576040516378de4a6960e11b815260040160405180910390fd5b600080546040516323b872dd60e01b8152336004820152306024820152604481018490526001600160a01b03909116906323b872dd906064016020604051808303816000875af1158015611417573d6000803e3d6000fd5b505050506040513d601f19601f8201168201806040525081019061143b91906119f5565b90508061145b576040516312171d8360e31b815260040160405180910390fd5b336000908152600160205260408120805484929061147a9084906119cc565b909155505060405182815233907f7c717985ac273e663b7f3050f5b15a4388ff6ed952338954f650e2093e13937f90602001610fb6565b60008181526002602052604081206003015481036114e257604051630d60e2c560e21b815260040160405180910390fd5b5060009081526002602052604090206003015490565b600354811061151a57604051634e23d03560e01b815260040160405180910390fd5b816001600160a01b031660038281548110611537576115376119df565b6000918252602090912001546001600160a01b03161461156a5760405163a2f90c8160e01b815260040160405180910390fd5b60035460009061157c90600190611978565b90508082146115f35760038181548110611598576115986119df565b600091825260209091200154600380546001600160a01b0390921691849081106115c4576115c46119df565b9060005260206000200160006101000a8154816001600160a01b0302191690836001600160a01b031602179055505b600380548061160457611604611a46565b60008281526020808220830160001990810180546001600160a01b03191690559092019092556001600160a01b039490941681526001909352505060409020600501805460ff19169055565b600080828411611669576116648484611978565b611673565b6116738385611978565b90506000836116848361271061198b565b61168e91906119b8565b6103e810925050505b92915050565b805160005b81811015611789578060006116b88260016119cc565b90505b83811015611709578482815181106116d5576116d56119df565b60200260200101518582815181106116ef576116ef6119df565b60200260200101511015611701578091505b6001016116bb565b5081811461178057838181518110611723576117236119df565b602002602001015184838151811061173d5761173d6119df565b6020026020010151858481518110611757576117576119df565b60200260200101868481518110611770576117706119df565b6020908102919091010191909152525b506001016116a2565b505050565b80516000908082036117b35760405163521299a960e01b815260040160405180910390fd5b6117be600282611a5c565b600003611837576002836117d282846119b8565b815181106117e2576117e26119df565b60200260200101518460016002856117fa91906119b8565b6118049190611978565b81518110611814576118146119df565b602002602001015161182691906119cc565b61183091906119b8565b9392505050565b826118436002836119b8565b81518110611853576118536119df565b6020026020010151915050919050565b80356001600160a01b038116811461187a57600080fd5b919050565b60006020828403121561189157600080fd5b61183082611863565b602080825282518282018190526000918401906040840190835b818110156118db5783516001600160a01b03168352602093840193909201916001016118b4565b509095945050505050565b6000602082840312156118f857600080fd5b5035919050565b6000806000806080858703121561191557600080fd5b61191e85611863565b966020860135965060408601359560600135945092505050565b6000806040838503121561194b57600080fd5b61195483611863565b946020939093013593505050565b634e487b7160e01b600052601160045260246000fd5b8181038181111561169757611697611962565b808202811582820484141761169757611697611962565b634e487b7160e01b600052601260045260246000fd5b6000826119c7576119c76119a2565b500490565b8082018082111561169757611697611962565b634e487b7160e01b600052603260045260246000fd5b600060208284031215611a0757600080fd5b8151801515811461183057600080fd5b634e487b7160e01b600052604160045260246000fd5b600060018201611a3f57611a3f611962565b5060010190565b634e487b7160e01b600052603160045260246000fd5b600082611a6b57611a6b6119a2565b50069056fea2646970667358221220cf978b37bab4a46e07f9aa44188bcf682b6eab1335a381a4b87030badad5606f64736f6c634300081e0033",
+  "deployedBytecode": "0x608060405234801561001057600080fd5b506004361061018e5760003560e01c80637f980edf116100de578063b88a802f11610097578063c7f898f011610071578063c7f898f014610386578063eb4f16b514610399578063eecd509a146103ac578063ff24357a146101b957600080fd5b8063b88a802f1461036b578063bd53436914610250578063c4d770901461037357600080fd5b80637f980edf146102ed57806383472fcf146103005780638bc116a21461032b5780638e15f47314610353578063a3cda9d11461035b578063ac9d5d691461036357600080fd5b80632e9498241161014b57806357772d311161012557806357772d311461029c5780636cfcca9c146102af5780636f85c7e4146102c25780637979e0ea146102ca57600080fd5b80632e9498241461025f5780633e07505c14610274578063479c92fe1461028957600080fd5b806302211f5e1461019357806308dbbb03146101b957806311ce06a2146101c9578063189a5a17146101d157806325c6840314610247578063298a9b2014610250575b600080fd5b6101a66101a136600461187f565b6103bf565b6040519081526020015b60405180910390f35b6101a668056bc75e2d6310000081565b6101a66104f1565b6102186101df36600461187f565b60016020819052600091825260409091208054918101546002820154600383015460048401546005909401549293919290919060ff1686565b6040805196875260208701959095529385019290925260608401526080830152151560a082015260c0016101b0565b6101a66103e881565b6101a6670de0b6b3a764000081565b61026761050e565b6040516101b0919061189a565b6102876102823660046118e6565b610570565b005b6102676102973660046118e6565b610785565b6102876102aa3660046118ff565b610927565b6102876102bd3660046118e6565b610c9e565b6101a6600281565b6101a66102d83660046118e6565b60026020526000908152604090206003015481565b6102876102fb3660046118e6565b610dc6565b600054610313906001600160a01b031681565b6040516001600160a01b0390911681526020016101b0565b61033e610339366004611938565b610fc2565b604080519283529015156020830152016101b0565b6101a6611070565b6101a6601881565b6101a6600a81565b6102876110d1565b6103136103813660046118e6565b6111cf565b6102876103943660046118e6565b6111f9565b6102876103a73660046118e6565b611368565b6101a66103ba3660046118e6565b6114b1565b6001600160a01b0381166000908152600160208181526040808420815160c08101835281548152938101549284019290925260028201549083015260038101546060830152600481015460808301526005015460ff16151560a0820181905261042b5750600092915050565b60006104356104f1565b90508160800151810361044a57505192915050565b600082608001518261045c9190611978565b6040840151602085015191925090831480156104785750600081115b1561048b57610488600182611978565b90505b81811061049d57505090519392505050565b60006104a98284611978565b905060006104bf670de0b6b3a76400008361198b565b865190915081106104d857506000979650505050505050565b85516104e5908290611978565b98975050505050505050565b60006104fe6018436119b8565b6105099060016119cc565b905090565b6060600380548060200260200160405190810160405280929190818152602001828054801561056657602002820191906000526020600020905b81546001600160a01b03168152600190910190602001808311610548575b5050505050905090565b3360009081526001602052604081206005015460ff16151590036105a6576040516229eaad60e31b815260040160405180910390fd5b60035481106105c857604051634e23d03560e01b815260040160405180910390fd5b336001600160a01b0316600382815481106105e5576105e56119df565b6000918252602090912001546001600160a01b0316146106185760405163a2f90c8160e01b815260040160405180910390fd5b3360009081526001602081905260409091209081015461063a906002906119cc565b6106426104f1565b101561066157604051630832f48360e21b815260040160405180910390fd5b600061066c336103bf565b905061069f60038481548110610684576106846119df565b6000918252602090912001546001600160a01b0316846114f8565b336000818152600160205260408082208290558154905163a9059cbb60e01b815260048101939093526024830184905290916001600160a01b039091169063a9059cbb906044016020604051808303816000875af1158015610705573d6000803e3d6000fd5b505050506040513d601f19601f8201168201806040525081019061072991906119f5565b905080610749576040516312171d8360e31b815260040160405180910390fd5b60405182815233907ffc3b44de028b3d70241998c7d84e5520785226d0c49d16d2b487735225254b3b906020015b60405180910390a250505050565b60008181526002602052604081206003810154606092036107b957604051630d60e2c560e21b815260040160405180910390fd5b600181015460009067ffffffffffffffff8111156107d9576107d9611a17565b604051908082528060200260200182016040528015610802578160200160208202803683370190505b5090506000805b600184015481101561091d57600084600101828154811061082c5761082c6119df565b60009182526020808320909101546001600160a01b03168083529087905260409091205490915060ff16156108615750610915565b6000856002018381548110610878576108786119df565b9060005260206000200154905080600003610894575050610915565b6108a2818760030154611650565b15610912578560010183815481106108bc576108bc6119df565b9060005260206000200160009054906101000a90046001600160a01b03168585815181106108ec576108ec6119df565b6001600160a01b03909216602092830291909101909101528361090e81611a2d565b9450505b50505b600101610809565b5081529392505050565b6001600160a01b03841660009081526001602052604090206005015460ff16610962576040516229eaad60e31b815260040160405180910390fd5b61096a6104f1565b831061098957604051638de4068d60e01b815260040160405180910390fd5b600083815260026020526040812060038101549091036109bc57604051630d60e2c560e21b815260040160405180910390fd5b6001600160a01b03851660009081526020829052604090205460ff16156109f65760405163640d410760e11b815260040160405180910390fd5b60018101548310610a1a57604051634e23d03560e01b815260040160405180910390fd5b806001018381548110610a2f57610a2f6119df565b6000918252602090912001546001600160a01b03868116911614610a665760405163a2f90c8160e01b815260040160405180910390fd5b6000816002018481548110610a7d57610a7d6119df565b9060005260206000200154905080600003610aab576040516339e78cf960e11b815260040160405180910390fd5b610ab9818360030154611650565b610ad657604051632626606360e11b815260040160405180910390fd5b6001600160a01b038616600090815260208381526040808320805460ff191660019081179091559091528120805490919068056bc75e2d6310000011610b255768056bc75e2d63100000610b28565b81545b905080826000016000828254610b3e9190611978565b90915550508154600003610b9b57610b5688866114f8565b876001600160a01b03167ffc3b44de028b3d70241998c7d84e5520785226d0c49d16d2b487735225254b3b6000604051610b9291815260200190565b60405180910390a25b60006064610baa600a8461198b565b610bb491906119b8565b6000805460405163a9059cbb60e01b81523360048201526024810184905292935090916001600160a01b039091169063a9059cbb906044016020604051808303816000875af1158015610c0b573d6000803e3d6000fd5b505050506040513d601f19601f82011682018060405250810190610c2f91906119f5565b905080610c4f576040516312171d8360e31b815260040160405180910390fd5b896001600160a01b03167f51cf713376ddb1e5f5828bb6aa39d99de812176d62c3d3550bdc4e0b5e86e1a584604051610c8a91815260200190565b60405180910390a250505050505050505050565b610ca66104f1565b8110610cc557604051638de4068d60e01b815260040160405180910390fd5b6000818152600260205260409020600381015415610cf657604051634032e39760e11b815260040160405180910390fd5b6002810154600003610d1b576040516339e78cf960e11b815260040160405180910390fd5b600081600201805480602002602001604051908101604052809291908181526020018280548015610d6b57602002820191906000526020600020905b815481526020019060010190808311610d57575b50505050509050610d7b8161169d565b610d848161178e565b6003830181905560405190815283907fedf992fb93a24d0aa183128c5dfb20a7603592bad3feb0702efa3a65260a2dad906020015b60405180910390a2505050565b3360009081526001602052604090206005015460ff1615610dfa57604051630eb0d31360e11b815260040160405180910390fd5b68056bc75e2d63100000811015610e24576040516378de4a6960e11b815260040160405180910390fd5b600080546040516323b872dd60e01b8152336004820152306024820152604481018490526001600160a01b03909116906323b872dd906064016020604051808303816000875af1158015610e7c573d6000803e3d6000fd5b505050506040513d601f19601f82011682018060405250810190610ea091906119f5565b905080610ec0576040516312171d8360e31b815260040160405180910390fd5b6040518060c00160405280838152602001600081526020016000815260200160008152602001610eee6104f1565b815260016020918201819052336000818152828452604080822086518155868601518186015586820151600282015560608701516003808301919091556080880151600483015560a0909701516005909101805460ff1916911515919091179055855493840186559490527fc2575a0e9e593c00f959f8c92f12db2869c3395a3b0502d05e2516446f71f85b90910180546001600160a01b0319168217905591518481527ff773bca07d020a1bc1fdd45ea3db573da547dd27180143afaf075c158a84759491015b60405180910390a25050565b60008181526002602052604081208190815b600182015481101561106657856001600160a01b0316826001018281548110610fff57610fff6119df565b6000918252602090912001546001600160a01b03160361105e5781600201818154811061102e5761102e6119df565b60009182526020808320909101546001600160a01b038916835293905260409020549193505060ff169050611069565b600101610fd4565b50505b9250929050565b600080600161107d6104f1565b6110879190611978565b600081815260026020526040812060030154919250036110ba57604051630d60e2c560e21b815260040160405180910390fd5b600090815260026020526040902060030154919050565b336000908152600160205260408120600381015460028201549192916110f79190611978565b90508060000361111a5760405163afb0be3360e01b815260040160405180910390fd5b600282015460038301556000611138670de0b6b3a76400008361198b565b6000546040516340c10f1960e01b8152336004820152602481018390529192506001600160a01b0316906340c10f1990604401600060405180830381600087803b15801561118557600080fd5b505af1158015611199573d6000803e3d6000fd5b50506040518381523392507f4ea3e03797614006774acce32832fbaa20d9d69de554df367f4bb8a98b92e7429150602001610db9565b600381815481106111df57600080fd5b6000918252602090912001546001600160a01b0316905081565b3360009081526001602052604081206005015460ff161515900361122f576040516229eaad60e31b815260040160405180910390fd5b8060000361124f5760405162bfc92160e01b815260040160405180910390fd5b68056bc75e2d63100000611262336103bf565b1015611281576040516378de4a6960e11b815260040160405180910390fd5b600061128b6104f1565b33600090815260016020819052604090912090810154919250908290036112c5576040516303309d3f60e11b815260040160405180910390fd5b600082815260026020818152604083206001808201805480830182559086528386200180546001600160a01b031916331790558184018054808301825590865292852090920187905584820186905591840180549293919290919061132b9084906119cc565b9091555050604080518581526020810185905233917f9e595d16d532e4b0dee9420e99a1a4c9862cfdb004a5d369e9695880daf6d3e09101610777565b3360009081526001602052604081206005015460ff161515900361139e576040516229eaad60e31b815260040160405180910390fd5b806000036113bf576040516378de4a6960e11b815260040160405180910390fd5b600080546040516323b872dd60e01b8152336004820152306024820152604481018490526001600160a01b03909116906323b872dd906064016020604051808303816000875af1158015611417573d6000803e3d6000fd5b505050506040513d601f19601f8201168201806040525081019061143b91906119f5565b90508061145b576040516312171d8360e31b815260040160405180910390fd5b336000908152600160205260408120805484929061147a9084906119cc565b909155505060405182815233907f7c717985ac273e663b7f3050f5b15a4388ff6ed952338954f650e2093e13937f90602001610fb6565b60008181526002602052604081206003015481036114e257604051630d60e2c560e21b815260040160405180910390fd5b5060009081526002602052604090206003015490565b600354811061151a57604051634e23d03560e01b815260040160405180910390fd5b816001600160a01b031660038281548110611537576115376119df565b6000918252602090912001546001600160a01b03161461156a5760405163a2f90c8160e01b815260040160405180910390fd5b60035460009061157c90600190611978565b90508082146115f35760038181548110611598576115986119df565b600091825260209091200154600380546001600160a01b0390921691849081106115c4576115c46119df565b9060005260206000200160006101000a8154816001600160a01b0302191690836001600160a01b031602179055505b600380548061160457611604611a46565b60008281526020808220830160001990810180546001600160a01b03191690559092019092556001600160a01b039490941681526001909352505060409020600501805460ff19169055565b600080828411611669576116648484611978565b611673565b6116738385611978565b90506000836116848361271061198b565b61168e91906119b8565b6103e810925050505b92915050565b805160005b81811015611789578060006116b88260016119cc565b90505b83811015611709578482815181106116d5576116d56119df565b60200260200101518582815181106116ef576116ef6119df565b60200260200101511015611701578091505b6001016116bb565b5081811461178057838181518110611723576117236119df565b602002602001015184838151811061173d5761173d6119df565b6020026020010151858481518110611757576117576119df565b60200260200101868481518110611770576117706119df565b6020908102919091010191909152525b506001016116a2565b505050565b80516000908082036117b35760405163521299a960e01b815260040160405180910390fd5b6117be600282611a5c565b600003611837576002836117d282846119b8565b815181106117e2576117e26119df565b60200260200101518460016002856117fa91906119b8565b6118049190611978565b81518110611814576118146119df565b602002602001015161182691906119cc565b61183091906119b8565b9392505050565b826118436002836119b8565b81518110611853576118536119df565b6020026020010151915050919050565b80356001600160a01b038116811461187a57600080fd5b919050565b60006020828403121561189157600080fd5b61183082611863565b602080825282518282018190526000918401906040840190835b818110156118db5783516001600160a01b03168352602093840193909201916001016118b4565b509095945050505050565b6000602082840312156118f857600080fd5b5035919050565b6000806000806080858703121561191557600080fd5b61191e85611863565b966020860135965060408601359560600135945092505050565b6000806040838503121561194b57600080fd5b61195483611863565b946020939093013593505050565b634e487b7160e01b600052601160045260246000fd5b8181038181111561169757611697611962565b808202811582820484141761169757611697611962565b634e487b7160e01b600052601260045260246000fd5b6000826119c7576119c76119a2565b500490565b8082018082111561169757611697611962565b634e487b7160e01b600052603260045260246000fd5b600060208284031215611a0757600080fd5b8151801515811461183057600080fd5b634e487b7160e01b600052604160045260246000fd5b600060018201611a3f57611a3f611962565b5060010190565b634e487b7160e01b600052603160045260246000fd5b600082611a6b57611a6b6119a2565b50069056fea2646970667358221220cf978b37bab4a46e07f9aa44188bcf682b6eab1335a381a4b87030badad5606f64736f6c634300081e0033",
+  "devdoc": {
+    "kind": "dev",
+    "methods": {
+      "claimReward()": {
+        "details": "Calculates rewards based on time elapsed since last claim."
+      },
+      "exitNode(uint256)": {
+        "details": "Removes the node from the system and sends the stake to the node.      Requires that the the initial waiting period has passed to ensure the      node has been slashed if it reported a bad price before allowing it to exit.",
+        "params": {
+          "index": "The index of the node to remove in nodeAddresses"
+        }
+      },
+      "getCurrentBucketNumber()": {
+        "details": "Returns the current bucket number based on the block number",
+        "returns": {
+          "_0": "The current bucket number"
+        }
+      },
+      "getEffectiveStake(address)": {
+        "details": "Effective stake = stakedAmount - (missedBuckets * INACTIVITY_PENALTY), floored at 0"
+      },
+      "getLatestPrice()": {
+        "details": "Requires that the median for the bucket be recorded via recordBucketMedian",
+        "returns": {
+          "_0": "The median price for the last finalized bucket"
+        }
+      },
+      "getNodeAddresses()": {
+        "returns": {
+          "_0": "Array of registered oracle node addresses"
+        }
+      },
+      "getOutlierNodes(uint256)": {
+        "params": {
+          "bucketNumber": "The bucket number to get the outliers from"
+        },
+        "returns": {
+          "_0": "Array of node addresses considered outliers"
+        }
+      },
+      "getPastPrice(uint256)": {
+        "params": {
+          "bucketNumber": "The bucket number to read the median price from"
+        },
+        "returns": {
+          "_0": "The median price stored for the bucket"
+        }
+      },
+      "getSlashedStatus(address,uint256)": {
+        "params": {
+          "bucketNumber": "The bucket number to get the data from",
+          "nodeAddress": "The address of the node to get the data for"
+        },
+        "returns": {
+          "price": "The price of the node at the specified bucket",
+          "slashed": "The slashed status of the node at the specified bucket"
+        }
+      },
+      "recordBucketMedian(uint256)": {
+        "details": "Anyone who uses the oracle's price feed can call this function to record the median price for a bucket.",
+        "params": {
+          "bucketNumber": "The bucket number to finalize"
+        }
+      },
+      "registerNode(uint256)": {
+        "details": "Creates a new OracleNode struct and adds the sender to the nodeAddresses array.      Requires minimum stake amount and prevents duplicate registrations."
+      },
+      "reportPrice(uint256)": {
+        "details": "Updates the node's lastReportedBucket and price in that bucket. Requires sufficient stake.",
+        "params": {
+          "price": "The new price value to report"
+        }
+      },
+      "slashNode(address,uint256,uint256,uint256)": {
+        "params": {
+          "bucketNumber": "The bucket number to slash the node from",
+          "nodeAddressesIndex": "The index of the node to slash in the nodeAddresses array",
+          "nodeToSlash": "The address of the node to slash",
+          "reportIndex": "The index of node in the prices and reporters arrays"
+        }
+      }
+    },
+    "version": 1
+  },
+  "userdoc": {
+    "errors": {
+      "EmptyArray()": [
+        {
+          "notice": "Errors //////"
+        }
+      ],
+      "NodeNotRegistered()": [
+        {
+          "notice": "Errors //////"
+        }
+      ]
+    },
+    "events": {
+      "NodeRegistered(address,uint256)": {
+        "notice": "Events /////"
+      }
+    },
+    "kind": "user",
+    "methods": {
+      "addStake(uint256)": {
+        "notice": "Allows a registered node to increase its ORA token stake"
+      },
+      "claimReward()": {
+        "notice": "Allows active and inactive nodes to claim accumulated ORA token rewards"
+      },
+      "constructor": {
+        "notice": "Constructor ///"
+      },
+      "exitNode(uint256)": {
+        "notice": "Allows a registered node to exit the system and withdraw their stake"
+      },
+      "getCurrentBucketNumber()": {
+        "notice": "Returns the current bucket number"
+      },
+      "getEffectiveStake(address)": {
+        "notice": "Returns the effective stake accounting for inactivity penalties via missed buckets"
+      },
+      "getLatestPrice()": {
+        "notice": "Returns the stored median price from the most recently completed bucket"
+      },
+      "getNodeAddresses()": {
+        "notice": "Returns the list of registered oracle node addresses"
+      },
+      "getOutlierNodes(uint256)": {
+        "notice": "Returns the addresses of nodes in a bucket whose reported price deviates beyond the threshold"
+      },
+      "getPastPrice(uint256)": {
+        "notice": "Returns the stored median price from a specified bucket"
+      },
+      "getSlashedStatus(address,uint256)": {
+        "notice": "Returns the price and slashed status of a node at a given bucket"
+      },
+      "oracleToken()": {
+        "notice": "State Variables //"
+      },
+      "recordBucketMedian(uint256)": {
+        "notice": "Records the median price for a bucket once sufficient reports are available"
+      },
+      "registerNode(uint256)": {
+        "notice": "Registers a new oracle node with initial ORA token stake"
+      },
+      "reportPrice(uint256)": {
+        "notice": "Updates the price reported by an oracle node (only registered nodes)"
+      },
+      "slashNode(address,uint256,uint256,uint256)": {
+        "notice": "Slashes a node for giving a price that is deviated too far from the average"
+      }
+    },
+    "version": 1
+  },
+  "storageLayout": {
+    "storage": [
+      {
+        "astId": 1112,
+        "contract": "contracts/01_Staking/StakingOracle.sol:StakingOracle",
+        "label": "oracleToken",
+        "offset": 0,
+        "slot": "0",
+        "type": "t_contract(ORA)1065"
+      },
+      {
+        "astId": 1143,
+        "contract": "contracts/01_Staking/StakingOracle.sol:StakingOracle",
+        "label": "nodes",
+        "offset": 0,
+        "slot": "1",
+        "type": "t_mapping(t_address,t_struct(OracleNode)1125_storage)"
+      },
+      {
+        "astId": 1148,
+        "contract": "contracts/01_Staking/StakingOracle.sol:StakingOracle",
+        "label": "blockBuckets",
+        "offset": 0,
+        "slot": "2",
+        "type": "t_mapping(t_uint256,t_struct(BlockBucket)1138_storage)"
+      },
+      {
+        "astId": 1151,
+        "contract": "contracts/01_Staking/StakingOracle.sol:StakingOracle",
+        "label": "nodeAddresses",
+        "offset": 0,
+        "slot": "3",
+        "type": "t_array(t_address)dyn_storage"
+      }
+    ],
+    "types": {
+      "t_address": {
+        "encoding": "inplace",
+        "label": "address",
+        "numberOfBytes": "20"
+      },
+      "t_array(t_address)dyn_storage": {
+        "base": "t_address",
+        "encoding": "dynamic_array",
+        "label": "address[]",
+        "numberOfBytes": "32"
+      },
+      "t_array(t_uint256)dyn_storage": {
+        "base": "t_uint256",
+        "encoding": "dynamic_array",
+        "label": "uint256[]",
+        "numberOfBytes": "32"
+      },
+      "t_bool": {
+        "encoding": "inplace",
+        "label": "bool",
+        "numberOfBytes": "1"
+      },
+      "t_contract(ORA)1065": {
+        "encoding": "inplace",
+        "label": "contract ORA",
+        "numberOfBytes": "20"
+      },
+      "t_mapping(t_address,t_bool)": {
+        "encoding": "mapping",
+        "key": "t_address",
+        "label": "mapping(address => bool)",
+        "numberOfBytes": "32",
+        "value": "t_bool"
+      },
+      "t_mapping(t_address,t_struct(OracleNode)1125_storage)": {
+        "encoding": "mapping",
+        "key": "t_address",
+        "label": "mapping(address => struct StakingOracle.OracleNode)",
+        "numberOfBytes": "32",
+        "value": "t_struct(OracleNode)1125_storage"
+      },
+      "t_mapping(t_uint256,t_struct(BlockBucket)1138_storage)": {
+        "encoding": "mapping",
+        "key": "t_uint256",
+        "label": "mapping(uint256 => struct StakingOracle.BlockBucket)",
+        "numberOfBytes": "32",
+        "value": "t_struct(BlockBucket)1138_storage"
+      },
+      "t_struct(BlockBucket)1138_storage": {
+        "encoding": "inplace",
+        "label": "struct StakingOracle.BlockBucket",
+        "members": [
+          {
+            "astId": 1129,
+            "contract": "contracts/01_Staking/StakingOracle.sol:StakingOracle",
+            "label": "slashedOffenses",
+            "offset": 0,
+            "slot": "0",
+            "type": "t_mapping(t_address,t_bool)"
+          },
+          {
+            "astId": 1132,
+            "contract": "contracts/01_Staking/StakingOracle.sol:StakingOracle",
+            "label": "reporters",
+            "offset": 0,
+            "slot": "1",
+            "type": "t_array(t_address)dyn_storage"
+          },
+          {
+            "astId": 1135,
+            "contract": "contracts/01_Staking/StakingOracle.sol:StakingOracle",
+            "label": "prices",
+            "offset": 0,
+            "slot": "2",
+            "type": "t_array(t_uint256)dyn_storage"
+          },
+          {
+            "astId": 1137,
+            "contract": "contracts/01_Staking/StakingOracle.sol:StakingOracle",
+            "label": "medianPrice",
+            "offset": 0,
+            "slot": "3",
+            "type": "t_uint256"
+          }
+        ],
+        "numberOfBytes": "128"
+      },
+      "t_struct(OracleNode)1125_storage": {
+        "encoding": "inplace",
+        "label": "struct StakingOracle.OracleNode",
+        "members": [
+          {
+            "astId": 1114,
+            "contract": "contracts/01_Staking/StakingOracle.sol:StakingOracle",
+            "label": "stakedAmount",
+            "offset": 0,
+            "slot": "0",
+            "type": "t_uint256"
+          },
+          {
+            "astId": 1116,
+            "contract": "contracts/01_Staking/StakingOracle.sol:StakingOracle",
+            "label": "lastReportedBucket",
+            "offset": 0,
+            "slot": "1",
+            "type": "t_uint256"
+          },
+          {
+            "astId": 1118,
+            "contract": "contracts/01_Staking/StakingOracle.sol:StakingOracle",
+            "label": "reportCount",
+            "offset": 0,
+            "slot": "2",
+            "type": "t_uint256"
+          },
+          {
+            "astId": 1120,
+            "contract": "contracts/01_Staking/StakingOracle.sol:StakingOracle",
+            "label": "claimedReportCount",
+            "offset": 0,
+            "slot": "3",
+            "type": "t_uint256"
+          },
+          {
+            "astId": 1122,
+            "contract": "contracts/01_Staking/StakingOracle.sol:StakingOracle",
+            "label": "firstBucket",
+            "offset": 0,
+            "slot": "4",
+            "type": "t_uint256"
+          },
+          {
+            "astId": 1124,
+            "contract": "contracts/01_Staking/StakingOracle.sol:StakingOracle",
+            "label": "active",
+            "offset": 0,
+            "slot": "5",
+            "type": "t_bool"
+          }
+        ],
+        "numberOfBytes": "192"
+      },
+      "t_uint256": {
+        "encoding": "inplace",
+        "label": "uint256",
+        "numberOfBytes": "32"
+      }
+    }
+  }
+}

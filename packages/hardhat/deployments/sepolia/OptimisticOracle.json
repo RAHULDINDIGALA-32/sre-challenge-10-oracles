@@ -1,0 +1,972 @@
+{
+  "address": "0x3c6D7C62e5E0DACC3f062f16Ae81084D8FD539ad",
+  "abi": [
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "_decider",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "nonpayable",
+      "type": "constructor"
+    },
+    {
+      "inputs": [],
+      "name": "AlreadyClaimed",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "AlreadySettled",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "AssertionNotFound",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "AssertionProposed",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "AwaitingDecider",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "InvalidTime",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "InvalidValue",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "NotDisputedAssertion",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "NotProposedAssertion",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "OnlyDecider",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "OnlyOwner",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "ProposalDisputed",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "TransferFailed",
+      "type": "error"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "assertionId",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "bool",
+          "name": "outcome",
+          "type": "bool"
+        },
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "winner",
+          "type": "address"
+        }
+      ],
+      "name": "AssertionSettled",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "oldDecider",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "newDecider",
+          "type": "address"
+        }
+      ],
+      "name": "DeciderUpdated",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "assertionId",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "asserter",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "string",
+          "name": "description",
+          "type": "string"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "reward",
+          "type": "uint256"
+        }
+      ],
+      "name": "EventAsserted",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "assertionId",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "disputer",
+          "type": "address"
+        }
+      ],
+      "name": "OutcomeDisputed",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "assertionId",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "proposer",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "bool",
+          "name": "outcome",
+          "type": "bool"
+        }
+      ],
+      "name": "OutcomeProposed",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "assertionId",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "asserter",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "amount",
+          "type": "uint256"
+        }
+      ],
+      "name": "RefundClaimed",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "assertionId",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "winner",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "amount",
+          "type": "uint256"
+        }
+      ],
+      "name": "RewardClaimed",
+      "type": "event"
+    },
+    {
+      "inputs": [],
+      "name": "DISPUTE_WINDOW",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "MINIMUM_ASSERTION_WINDOW",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "string",
+          "name": "description",
+          "type": "string"
+        },
+        {
+          "internalType": "uint256",
+          "name": "startTime",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "endTime",
+          "type": "uint256"
+        }
+      ],
+      "name": "assertEvent",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "payable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "name": "assertions",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "asserter",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "proposer",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "disputer",
+          "type": "address"
+        },
+        {
+          "internalType": "bool",
+          "name": "proposedOutcome",
+          "type": "bool"
+        },
+        {
+          "internalType": "bool",
+          "name": "resolvedOutcome",
+          "type": "bool"
+        },
+        {
+          "internalType": "uint256",
+          "name": "reward",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "bond",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "startTime",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "endTime",
+          "type": "uint256"
+        },
+        {
+          "internalType": "bool",
+          "name": "claimed",
+          "type": "bool"
+        },
+        {
+          "internalType": "address",
+          "name": "winner",
+          "type": "address"
+        },
+        {
+          "internalType": "string",
+          "name": "description",
+          "type": "string"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "assertionId",
+          "type": "uint256"
+        }
+      ],
+      "name": "claimDisputedReward",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "assertionId",
+          "type": "uint256"
+        }
+      ],
+      "name": "claimRefund",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "assertionId",
+          "type": "uint256"
+        }
+      ],
+      "name": "claimUndisputedReward",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "decider",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "assertionId",
+          "type": "uint256"
+        }
+      ],
+      "name": "disputeOutcome",
+      "outputs": [],
+      "stateMutability": "payable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "assertionId",
+          "type": "uint256"
+        }
+      ],
+      "name": "getAssertion",
+      "outputs": [
+        {
+          "components": [
+            {
+              "internalType": "address",
+              "name": "asserter",
+              "type": "address"
+            },
+            {
+              "internalType": "address",
+              "name": "proposer",
+              "type": "address"
+            },
+            {
+              "internalType": "address",
+              "name": "disputer",
+              "type": "address"
+            },
+            {
+              "internalType": "bool",
+              "name": "proposedOutcome",
+              "type": "bool"
+            },
+            {
+              "internalType": "bool",
+              "name": "resolvedOutcome",
+              "type": "bool"
+            },
+            {
+              "internalType": "uint256",
+              "name": "reward",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "bond",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "startTime",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "endTime",
+              "type": "uint256"
+            },
+            {
+              "internalType": "bool",
+              "name": "claimed",
+              "type": "bool"
+            },
+            {
+              "internalType": "address",
+              "name": "winner",
+              "type": "address"
+            },
+            {
+              "internalType": "string",
+              "name": "description",
+              "type": "string"
+            }
+          ],
+          "internalType": "struct OptimisticOracle.EventAssertion",
+          "name": "",
+          "type": "tuple"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "assertionId",
+          "type": "uint256"
+        }
+      ],
+      "name": "getResolution",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "assertionId",
+          "type": "uint256"
+        }
+      ],
+      "name": "getState",
+      "outputs": [
+        {
+          "internalType": "enum OptimisticOracle.State",
+          "name": "",
+          "type": "uint8"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "nextAssertionId",
+      "outputs": [
+        {
+          "internalType": "uint256",
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "owner",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "assertionId",
+          "type": "uint256"
+        },
+        {
+          "internalType": "bool",
+          "name": "outcome",
+          "type": "bool"
+        }
+      ],
+      "name": "proposeOutcome",
+      "outputs": [],
+      "stateMutability": "payable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "_decider",
+          "type": "address"
+        }
+      ],
+      "name": "setDecider",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "uint256",
+          "name": "assertionId",
+          "type": "uint256"
+        },
+        {
+          "internalType": "bool",
+          "name": "resolvedOutcome",
+          "type": "bool"
+        }
+      ],
+      "name": "settleAssertion",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    }
+  ],
+  "transactionHash": "0x48b0d046ba1eee664c33eb4cf6794a53b0d85224b5c05fd479cd0b8080283bfd",
+  "receipt": {
+    "to": null,
+    "from": "0xc512c6DE79Ca12E5AA90224f372569fcaf8e68f9",
+    "contractAddress": "0x3c6D7C62e5E0DACC3f062f16Ae81084D8FD539ad",
+    "transactionIndex": 69,
+    "gasUsed": "1519929",
+    "logsBloom": "0x00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000",
+    "blockHash": "0x0d2635335af8e9f16e494add7b9a590e0ee1a82989785e39ac2ad2ed0805d0d0",
+    "transactionHash": "0x48b0d046ba1eee664c33eb4cf6794a53b0d85224b5c05fd479cd0b8080283bfd",
+    "logs": [],
+    "blockNumber": 10692206,
+    "cumulativeGasUsed": "11269545",
+    "status": 1,
+    "byzantium": true
+  },
+  "args": [
+    "0xEd1D114bb7485F01ec3D466acFd9a6a64cF8D2AB"
+  ],
+  "numDeployments": 1,
+  "solcInputHash": "0f0761d05a8d14bc74de106183098dec",
+  "metadata": "{\"compiler\":{\"version\":\"0.8.30+commit.73712a01\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_decider\",\"type\":\"address\"}],\"stateMutability\":\"nonpayable\",\"type\":\"constructor\"},{\"inputs\":[],\"name\":\"AlreadyClaimed\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"AlreadySettled\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"AssertionNotFound\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"AssertionProposed\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"AwaitingDecider\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"InvalidTime\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"InvalidValue\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"NotDisputedAssertion\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"NotProposedAssertion\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"OnlyDecider\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"OnlyOwner\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"ProposalDisputed\",\"type\":\"error\"},{\"inputs\":[],\"name\":\"TransferFailed\",\"type\":\"error\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"assertionId\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"bool\",\"name\":\"outcome\",\"type\":\"bool\"},{\"indexed\":false,\"internalType\":\"address\",\"name\":\"winner\",\"type\":\"address\"}],\"name\":\"AssertionSettled\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"address\",\"name\":\"oldDecider\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"address\",\"name\":\"newDecider\",\"type\":\"address\"}],\"name\":\"DeciderUpdated\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"assertionId\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"address\",\"name\":\"asserter\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"string\",\"name\":\"description\",\"type\":\"string\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"reward\",\"type\":\"uint256\"}],\"name\":\"EventAsserted\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"assertionId\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"address\",\"name\":\"disputer\",\"type\":\"address\"}],\"name\":\"OutcomeDisputed\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"assertionId\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"address\",\"name\":\"proposer\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"bool\",\"name\":\"outcome\",\"type\":\"bool\"}],\"name\":\"OutcomeProposed\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"assertionId\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"address\",\"name\":\"asserter\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"}],\"name\":\"RefundClaimed\",\"type\":\"event\"},{\"anonymous\":false,\"inputs\":[{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"assertionId\",\"type\":\"uint256\"},{\"indexed\":false,\"internalType\":\"address\",\"name\":\"winner\",\"type\":\"address\"},{\"indexed\":false,\"internalType\":\"uint256\",\"name\":\"amount\",\"type\":\"uint256\"}],\"name\":\"RewardClaimed\",\"type\":\"event\"},{\"inputs\":[],\"name\":\"DISPUTE_WINDOW\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"MINIMUM_ASSERTION_WINDOW\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"string\",\"name\":\"description\",\"type\":\"string\"},{\"internalType\":\"uint256\",\"name\":\"startTime\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"endTime\",\"type\":\"uint256\"}],\"name\":\"assertEvent\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"payable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"name\":\"assertions\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"asserter\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"proposer\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"disputer\",\"type\":\"address\"},{\"internalType\":\"bool\",\"name\":\"proposedOutcome\",\"type\":\"bool\"},{\"internalType\":\"bool\",\"name\":\"resolvedOutcome\",\"type\":\"bool\"},{\"internalType\":\"uint256\",\"name\":\"reward\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"bond\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"startTime\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"endTime\",\"type\":\"uint256\"},{\"internalType\":\"bool\",\"name\":\"claimed\",\"type\":\"bool\"},{\"internalType\":\"address\",\"name\":\"winner\",\"type\":\"address\"},{\"internalType\":\"string\",\"name\":\"description\",\"type\":\"string\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"assertionId\",\"type\":\"uint256\"}],\"name\":\"claimDisputedReward\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"assertionId\",\"type\":\"uint256\"}],\"name\":\"claimRefund\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"assertionId\",\"type\":\"uint256\"}],\"name\":\"claimUndisputedReward\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"decider\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"assertionId\",\"type\":\"uint256\"}],\"name\":\"disputeOutcome\",\"outputs\":[],\"stateMutability\":\"payable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"assertionId\",\"type\":\"uint256\"}],\"name\":\"getAssertion\",\"outputs\":[{\"components\":[{\"internalType\":\"address\",\"name\":\"asserter\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"proposer\",\"type\":\"address\"},{\"internalType\":\"address\",\"name\":\"disputer\",\"type\":\"address\"},{\"internalType\":\"bool\",\"name\":\"proposedOutcome\",\"type\":\"bool\"},{\"internalType\":\"bool\",\"name\":\"resolvedOutcome\",\"type\":\"bool\"},{\"internalType\":\"uint256\",\"name\":\"reward\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"bond\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"startTime\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"endTime\",\"type\":\"uint256\"},{\"internalType\":\"bool\",\"name\":\"claimed\",\"type\":\"bool\"},{\"internalType\":\"address\",\"name\":\"winner\",\"type\":\"address\"},{\"internalType\":\"string\",\"name\":\"description\",\"type\":\"string\"}],\"internalType\":\"struct OptimisticOracle.EventAssertion\",\"name\":\"\",\"type\":\"tuple\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"assertionId\",\"type\":\"uint256\"}],\"name\":\"getResolution\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"assertionId\",\"type\":\"uint256\"}],\"name\":\"getState\",\"outputs\":[{\"internalType\":\"enum OptimisticOracle.State\",\"name\":\"\",\"type\":\"uint8\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"nextAssertionId\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"owner\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"assertionId\",\"type\":\"uint256\"},{\"internalType\":\"bool\",\"name\":\"outcome\",\"type\":\"bool\"}],\"name\":\"proposeOutcome\",\"outputs\":[],\"stateMutability\":\"payable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_decider\",\"type\":\"address\"}],\"name\":\"setDecider\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"assertionId\",\"type\":\"uint256\"},{\"internalType\":\"bool\",\"name\":\"resolvedOutcome\",\"type\":\"bool\"}],\"name\":\"settleAssertion\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}],\"devdoc\":{\"kind\":\"dev\",\"methods\":{\"assertEvent(string,uint256,uint256)\":{\"details\":\"Requires ETH payment as reward for correct proposers. Bond requirement is 2x the reward.      Sets default timestamps if not provided. Validates timing requirements.\",\"params\":{\"description\":\"Human-readable description of the event (e.g. \\\"Did X happen by time Y?\\\")\",\"endTime\":\"When the assertion expires (0 for startTime + minimum window)\",\"startTime\":\"When proposals can begin (0 for current block timestamp)\"},\"returns\":{\"_0\":\"The unique assertion ID for the newly created assertion\"}},\"claimDisputedReward(uint256)\":{\"details\":\"Anyone can trigger this function. Pays decider fee and transfers remaining rewards to winner.      Can only be called after decider has settled the dispute.\",\"params\":{\"assertionId\":\"The unique identifier of the disputed assertion to claim rewards for\"}},\"claimRefund(uint256)\":{\"details\":\"Anyone can trigger this function. Returns the original reward to the asserter.      Can only be called after assertion deadline has passed without any proposals.\",\"params\":{\"assertionId\":\"The unique identifier of the expired assertion to claim refund for\"}},\"claimUndisputedReward(uint256)\":{\"details\":\"Anyone can trigger this function. Transfers reward + bond to the proposer.      Can only be called after dispute window has passed without disputes.\",\"params\":{\"assertionId\":\"The unique identifier of the assertion to claim rewards for\"}},\"disputeOutcome(uint256)\":{\"details\":\"Requires bonding ETH equal to the bond amount. Can only dispute once per assertion      and must be within the dispute window after proposal.\",\"params\":{\"assertionId\":\"The unique identifier of the assertion to dispute\"}},\"getAssertion(uint256)\":{\"details\":\"Provides access to all fields of the EventAssertion struct\",\"params\":{\"assertionId\":\"The unique identifier of the assertion to retrieve\"},\"returns\":{\"_0\":\"The complete EventAssertion struct containing all assertion data\"}},\"getResolution(uint256)\":{\"details\":\"For undisputed assertions, returns the proposed outcome after dispute window.      For disputed assertions, returns the decider's resolved outcome.\",\"params\":{\"assertionId\":\"The unique identifier of the assertion to get resolution for\"},\"returns\":{\"_0\":\"The final boolean outcome of the assertion\"}},\"getState(uint256)\":{\"details\":\"Evaluates assertion progress through states: Invalid, Asserted, Proposed, Disputed, Settled, Expired\",\"params\":{\"assertionId\":\"The unique identifier of the assertion to check state for\"},\"returns\":{\"_0\":\"The current State enum value representing the assertion's status\"}},\"proposeOutcome(uint256,bool)\":{\"details\":\"Requires bonding ETH equal to 2x the original reward. Sets dispute window deadline.      Can only be called once per assertion and within the assertion time window.\",\"params\":{\"assertionId\":\"The unique identifier of the assertion to propose an outcome for\",\"outcome\":\"The proposed boolean outcome (true or false) for the event\"}},\"setDecider(address)\":{\"details\":\"Changes the address authorized to settle disputed assertions.      Emits DeciderUpdated event with old and new addresses.\",\"params\":{\"_decider\":\"The new address that will act as decider for disputed assertions\"}},\"settleAssertion(uint256,bool)\":{\"details\":\"Sets the resolved outcome and determines winner based on proposal accuracy.\",\"params\":{\"assertionId\":\"The unique identifier of the disputed assertion to settle\",\"resolvedOutcome\":\"The decider's determination of the true outcome\"}}},\"version\":1},\"userdoc\":{\"errors\":{\"AssertionNotFound()\":[{\"notice\":\"Errors //////\"}]},\"events\":{\"EventAsserted(uint256,address,string,uint256)\":{\"notice\":\"Events /////\"}},\"kind\":\"user\",\"methods\":{\"assertEvent(string,uint256,uint256)\":{\"notice\":\"Creates a new assertion about an event with a true/false outcome\"},\"claimDisputedReward(uint256)\":{\"notice\":\"Claims reward for disputed assertions after decider settlement\"},\"claimRefund(uint256)\":{\"notice\":\"Claims refund for assertions that receive no proposals before deadline\"},\"claimUndisputedReward(uint256)\":{\"notice\":\"Claims reward for undisputed assertions after dispute window expires\"},\"constructor\":{\"notice\":\"Constructor ///\"},\"disputeOutcome(uint256)\":{\"notice\":\"Disputes a proposed outcome by bonding ETH\"},\"getAssertion(uint256)\":{\"notice\":\"Returns the complete assertion details for a given assertion ID\"},\"getResolution(uint256)\":{\"notice\":\"Returns the final resolved outcome of a settled assertion\"},\"getState(uint256)\":{\"notice\":\"Returns the current state of an assertion based on its lifecycle stage\"},\"proposeOutcome(uint256,bool)\":{\"notice\":\"Proposes the outcome (true or false) for an asserted event\"},\"setDecider(address)\":{\"notice\":\"Updates the decider address (only contract owner)\"},\"settleAssertion(uint256,bool)\":{\"notice\":\"Resolves disputed assertions by determining the correct outcome (only decider)\"}},\"version\":1}},\"settings\":{\"compilationTarget\":{\"contracts/02_Optimistic/OptimisticOracle.sol\":\"OptimisticOracle\"},\"evmVersion\":\"paris\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\",\"useLiteralContent\":true},\"optimizer\":{\"enabled\":true,\"runs\":200},\"remappings\":[]},\"sources\":{\"contracts/02_Optimistic/OptimisticOracle.sol\":{\"content\":\"// SPDX-License-Identifier: MIT\\npragma solidity >=0.8.0 <0.9.0;\\n\\ncontract OptimisticOracle {\\n    ////////////////\\n    /// Enums //////\\n    ////////////////\\n\\n    enum State {\\n        Invalid,\\n        Asserted,\\n        Proposed,\\n        Disputed,\\n        Settled,\\n        Expired\\n    }\\n\\n    /////////////////\\n    /// Errors //////\\n    /////////////////\\n\\n    error AssertionNotFound();\\n    error AssertionProposed();\\n    error InvalidValue();\\n    error InvalidTime();\\n    error ProposalDisputed();\\n    error NotProposedAssertion();\\n    error AlreadyClaimed();\\n    error AlreadySettled();\\n    error AwaitingDecider();\\n    error NotDisputedAssertion();\\n    error OnlyDecider();\\n    error OnlyOwner();\\n    error TransferFailed();\\n\\n    //////////////////////\\n    /// State Variables //\\n    //////////////////////\\n\\n    struct EventAssertion {\\n        address asserter;\\n        address proposer;\\n        address disputer;\\n        bool proposedOutcome;\\n        bool resolvedOutcome;\\n        uint256 reward;\\n        uint256 bond;\\n        uint256 startTime;\\n        uint256 endTime;\\n        bool claimed;\\n        address winner;\\n        string description;\\n    }\\n\\n    uint256 public constant MINIMUM_ASSERTION_WINDOW = 3 minutes;\\n    uint256 public constant DISPUTE_WINDOW = 3 minutes;\\n    address public decider;\\n    address public owner;\\n    uint256 public nextAssertionId = 1;\\n    mapping(uint256 => EventAssertion) public assertions;\\n\\n    ////////////////\\n    /// Events /////\\n    ////////////////\\n\\n    event EventAsserted(uint256 assertionId, address asserter, string description, uint256 reward);\\n    event OutcomeProposed(uint256 assertionId, address proposer, bool outcome);\\n    event OutcomeDisputed(uint256 assertionId, address disputer);\\n    event AssertionSettled(uint256 assertionId, bool outcome, address winner);\\n    event DeciderUpdated(address oldDecider, address newDecider);\\n    event RewardClaimed(uint256 assertionId, address winner, uint256 amount);\\n    event RefundClaimed(uint256 assertionId, address asserter, uint256 amount);\\n\\n    ///////////////////\\n    /// Modifiers /////\\n    ///////////////////\\n\\n    /**\\n     * @notice Modifier to restrict function access to the designated decider\\n     * @dev Ensures only the decider can settle disputed assertions\\n     */\\n    modifier onlyDecider() {\\n        if (msg.sender != decider) revert OnlyDecider();\\n        _;\\n    }\\n\\n    /**\\n     * @notice Modifier to restrict function access to the contract owner\\n     * @dev Ensures only the owner can update critical contract parameters\\n     */\\n    modifier onlyOwner() {\\n        if (msg.sender != owner) revert OnlyOwner();\\n        _;\\n    }\\n\\n    ///////////////////\\n    /// Constructor ///\\n    ///////////////////\\n\\n    constructor(address _decider) {\\n        decider = _decider;\\n        owner = msg.sender;\\n    }\\n\\n    ///////////////////\\n    /// Functions /////\\n    ///////////////////\\n\\n    /**\\n     * @notice Updates the decider address (only contract owner)\\n     * @dev Changes the address authorized to settle disputed assertions.\\n     *      Emits DeciderUpdated event with old and new addresses.\\n     * @param _decider The new address that will act as decider for disputed assertions\\n     */\\n    function setDecider(address _decider) external onlyOwner {\\n        address oldDecider = address(decider);\\n        decider = _decider;\\n        emit DeciderUpdated(oldDecider, _decider);\\n    }\\n\\n    /**\\n     * @notice Returns the complete assertion details for a given assertion ID\\n     * @dev Provides access to all fields of the EventAssertion struct\\n     * @param assertionId The unique identifier of the assertion to retrieve\\n     * @return The complete EventAssertion struct containing all assertion data\\n     */\\n    function getAssertion(uint256 assertionId) external view returns (EventAssertion memory) {\\n        return assertions[assertionId];\\n    }\\n\\n    /**\\n     * @notice Creates a new assertion about an event with a true/false outcome\\n     * @dev Requires ETH payment as reward for correct proposers. Bond requirement is 2x the reward.\\n     *      Sets default timestamps if not provided. Validates timing requirements.\\n     * @param description Human-readable description of the event (e.g. \\\"Did X happen by time Y?\\\")\\n     * @param startTime When proposals can begin (0 for current block timestamp)\\n     * @param endTime When the assertion expires (0 for startTime + minimum window)\\n     * @return The unique assertion ID for the newly created assertion\\n     */\\n    function assertEvent(\\n        string memory description,\\n        uint256 startTime,\\n        uint256 endTime\\n    ) external payable returns (uint256) {\\n         if (msg.value == 0) revert InvalidValue();\\n\\n         if (startTime == 0) {\\n            startTime = block.timestamp;\\n         }\\n\\n        if (endTime == 0) {\\n            endTime = startTime + MINIMUM_ASSERTION_WINDOW;\\n        }\\n\\n        if (startTime < block.timestamp) revert InvalidTime();\\n        if (endTime <= startTime) revert InvalidTime(); \\n        if (endTime - startTime < MINIMUM_ASSERTION_WINDOW) revert InvalidTime();\\n\\n        EventAssertion memory newAssertion = EventAssertion({\\n            asserter: msg.sender,\\n            proposer: address(0),\\n            disputer: address(0),\\n            proposedOutcome: false,\\n            resolvedOutcome: false,\\n            reward: msg.value,\\n            bond: msg.value * 2,\\n            startTime: startTime,\\n            endTime: endTime,\\n            claimed: false,\\n            winner: address(0),\\n            description: description\\n        });\\n\\n        assertions[nextAssertionId] = newAssertion;\\n        nextAssertionId++;\\n\\n        emit EventAsserted(nextAssertionId - 1, msg.sender, description, msg.value);\\n\\n        return nextAssertionId - 1;\\n    }\\n\\n    /**\\n     * @notice Proposes the outcome (true or false) for an asserted event\\n     * @dev Requires bonding ETH equal to 2x the original reward. Sets dispute window deadline.\\n     *      Can only be called once per assertion and within the assertion time window.\\n     * @param assertionId The unique identifier of the assertion to propose an outcome for\\n     * @param outcome The proposed boolean outcome (true or false) for the event\\n     */\\n    function proposeOutcome(uint256 assertionId, bool outcome) external payable {\\n        EventAssertion storage assertion = assertions[assertionId];\\n\\n        if (assertion.asserter == address(0)) revert AssertionNotFound();\\n        if (assertion.proposer != address(0)) revert AssertionProposed();\\n        if (block.timestamp < assertion.startTime || block.timestamp > assertion.endTime) revert InvalidTime();\\n        if (msg.value != assertion.bond) revert InvalidValue();\\n\\n        assertion.proposer = msg.sender;\\n        assertion.proposedOutcome = outcome;\\n        assertion.endTime = block.timestamp + DISPUTE_WINDOW;\\n\\n        emit OutcomeProposed(assertionId, msg.sender, outcome);\\n    }\\n\\n    /**\\n     * @notice Disputes a proposed outcome by bonding ETH\\n     * @dev Requires bonding ETH equal to the bond amount. Can only dispute once per assertion\\n     *      and must be within the dispute window after proposal.\\n     * @param assertionId The unique identifier of the assertion to dispute\\n     */\\n    function disputeOutcome(uint256 assertionId) external payable {\\n        EventAssertion storage assertion = assertions[assertionId];\\n\\n        if (assertion.proposer == address(0)) revert NotProposedAssertion();\\n        if (assertion.disputer != address(0)) revert ProposalDisputed();\\n        if (block.timestamp > assertion.endTime) revert InvalidTime();\\n        if (msg.value != assertion.bond) revert InvalidValue();\\n\\n        assertion.disputer = msg.sender;\\n\\n        emit OutcomeDisputed(assertionId, msg.sender);\\n    }\\n\\n    /**\\n     * @notice Claims reward for undisputed assertions after dispute window expires\\n     * @dev Anyone can trigger this function. Transfers reward + bond to the proposer.\\n     *      Can only be called after dispute window has passed without disputes.\\n     * @param assertionId The unique identifier of the assertion to claim rewards for\\n     */\\n    function claimUndisputedReward(uint256 assertionId) external {\\n        EventAssertion storage assertion = assertions[assertionId];\\n\\n        if (assertion.proposer == address(0)) revert NotProposedAssertion();\\n        if (assertion.disputer != address(0)) revert ProposalDisputed();\\n        if (block.timestamp <= assertion.endTime) revert InvalidTime();\\n        if (assertion.claimed) revert AlreadyClaimed();\\n\\n        assertion.claimed = true;\\n        assertion.resolvedOutcome = assertion.proposedOutcome;\\n        assertion.winner = assertion.proposer;\\n\\n        uint256 payout = (assertion.reward + assertion.bond);\\n        (bool success, ) = payable(assertion.proposer).call{value: payout}(\\\"\\\");\\n        if (!success) revert TransferFailed();\\n\\n        emit RewardClaimed(assertionId, assertion.proposer, payout);\\n    }\\n\\n    /**\\n     * @notice Claims reward for disputed assertions after decider settlement\\n     * @dev Anyone can trigger this function. Pays decider fee and transfers remaining rewards to winner.\\n     *      Can only be called after decider has settled the dispute.\\n     * @param assertionId The unique identifier of the disputed assertion to claim rewards for\\n     */\\n    function claimDisputedReward(uint256 assertionId) external {\\n        EventAssertion storage assertion = assertions[assertionId];\\n\\n        if (assertion.proposer == address(0)) revert NotProposedAssertion();\\n        if (assertion.disputer == address(0)) revert NotDisputedAssertion();\\n        if (assertion.winner == address(0)) revert AwaitingDecider();\\n        if (assertion.claimed) revert AlreadyClaimed();\\n\\n        assertion.claimed = true;\\n\\n        uint256 winnerPayout = assertion.reward + assertion.bond;\\n        uint256 deciderPayout = assertion.bond; // Decider fee is equal to the looser bond amount\\n\\n        (bool successWinner, ) = payable(assertion.winner).call{value: winnerPayout}(\\\"\\\");\\n        if (!successWinner) revert TransferFailed();\\n\\n        (bool successDecider, ) = payable(decider).call{value: deciderPayout}(\\\"\\\");\\n        if (!successDecider) revert TransferFailed();\\n\\n        emit RewardClaimed(assertionId, assertion.winner, winnerPayout);\\n    }\\n\\n    /**\\n     * @notice Claims refund for assertions that receive no proposals before deadline\\n     * @dev Anyone can trigger this function. Returns the original reward to the asserter.\\n     *      Can only be called after assertion deadline has passed without any proposals.\\n     * @param assertionId The unique identifier of the expired assertion to claim refund for\\n     */\\n    function claimRefund(uint256 assertionId) external {\\n        EventAssertion storage assertion = assertions[assertionId];\\n\\n        if (assertion.proposer != address(0)) revert AssertionProposed();\\n        if(block.timestamp <= assertion.endTime) revert InvalidTime();\\n        if (assertion.claimed) revert AlreadyClaimed();\\n\\n        assertion.claimed = true;\\n\\n        (bool success, ) = payable(assertion.asserter).call{value: assertion.reward}(\\\"\\\");\\n        if (!success) revert TransferFailed();\\n\\n        emit RefundClaimed(assertionId, assertion.asserter, assertion.reward);\\n    }\\n\\n    /**\\n     * @notice Resolves disputed assertions by determining the correct outcome (only decider)\\n     * @dev Sets the resolved outcome and determines winner based on proposal accuracy.\\n     * @param assertionId The unique identifier of the disputed assertion to settle\\n     * @param resolvedOutcome The decider's determination of the true outcome\\n     */\\n    function settleAssertion(uint256 assertionId, bool resolvedOutcome) external onlyDecider {\\n        EventAssertion storage assertion = assertions[assertionId];\\n\\n        if (assertion.proposer == address(0)) revert NotProposedAssertion();\\n        if (assertion.disputer == address(0)) revert NotDisputedAssertion();\\n        if (assertion.winner != address(0)) revert AlreadySettled();\\n\\n        assertion.resolvedOutcome = resolvedOutcome;\\n\\n        // Determine winner based on whether the proposed outcome matches the resolved outcome\\n        assertion.winner = (resolvedOutcome == assertion.proposedOutcome)\\n            ? assertion.proposer\\n            : assertion.disputer;\\n\\n        emit AssertionSettled(assertionId, resolvedOutcome, assertion.winner);\\n    }\\n\\n    /**\\n     * @notice Returns the current state of an assertion based on its lifecycle stage\\n     * @dev Evaluates assertion progress through states: Invalid, Asserted, Proposed, Disputed, Settled, Expired\\n     * @param assertionId The unique identifier of the assertion to check state for\\n     * @return The current State enum value representing the assertion's status\\n     */\\n    function getState(uint256 assertionId) external view returns (State) {\\n        EventAssertion storage assertion = assertions[assertionId];\\n\\n        if (assertion.asserter == address(0)) return State.Invalid;\\n        if (assertion.winner != address(0)) return State.Settled;\\n        if (assertion.disputer != address(0)) return State.Disputed;\\n\\n        if (assertion.proposer == address(0)) {\\n            if(block.timestamp > assertion.endTime) return State.Expired;\\n            return State.Asserted;\\n        }\\n\\n        if (block.timestamp > assertion.endTime) return State.Settled;\\n\\n        return State.Proposed;\\n    }\\n\\n    /**\\n     * @notice Returns the final resolved outcome of a settled assertion\\n     * @dev For undisputed assertions, returns the proposed outcome after dispute window.\\n     *      For disputed assertions, returns the decider's resolved outcome.\\n     * @param assertionId The unique identifier of the assertion to get resolution for\\n     * @return The final boolean outcome of the assertion\\n     */\\n    function getResolution(uint256 assertionId) external view returns (bool) {\\n        EventAssertion storage assertion = assertions[assertionId];\\n\\n        if (assertion.asserter == address(0)) revert AssertionNotFound();\\n        if (assertion.proposer == address(0)) revert NotProposedAssertion();\\n       \\n       if (assertion.disputer == address(0)) {\\n            if (block.timestamp <= assertion.endTime) revert InvalidTime();\\n            return assertion.proposedOutcome; // Undisputed resolution\\n        }\\n\\n        if (assertion.winner == address(0)) revert AwaitingDecider();\\n\\n        return assertion.resolvedOutcome; // Disputed resolution \\n    }\\n}\\n\",\"keccak256\":\"0x9f6a4a7466a7e63ca0bef11a366d44e79af2deb5af7b48ce40525f4058be788c\",\"license\":\"MIT\"}},\"version\":1}",
+  "bytecode": "0x60806040526001600255348015601457600080fd5b506040516119e03803806119e0833981016040819052603191605e565b600080546001600160a01b039092166001600160a01b03199283161790556001805490911633179055608c565b600060208284031215606f57600080fd5b81516001600160a01b0381168114608557600080fd5b9392505050565b6119458061009b6000396000f3fe6080604052600436106100fe5760003560e01c806388553a2a11610095578063d21a727d11610064578063d21a727d146102aa578063d565a533146102ca578063db4295b7146102fa578063f585dc571461015b578063fc6def151461031a57600080fd5b806388553a2a146102395780638da5cb5b1461024c578063a9809c2b14610284578063b40b6d001461029757600080fd5b80634d7ba587116100d15780634d7ba587146101ab578063524232f6146101cb5780635b366bb9146102035780635b7baf641461021957600080fd5b806302f5ee7e146101035780631d99e167146101255780632db4f2331461015b57806344c9af281461017e575b600080fd5b34801561010f57600080fd5b5061012361011e3660046113df565b61033a565b005b34801561013157600080fd5b506101456101403660046113df565b61051e565b604051610152919061143e565b60405180910390f35b34801561016757600080fd5b5061017060b481565b604051908152602001610152565b34801561018a57600080fd5b5061019e6101993660046113df565b6106d3565b6040516101529190611521565b3480156101b757600080fd5b506101236101c6366004611549565b610784565b3480156101d757600080fd5b506101eb6101e63660046113df565b610811565b6040516101529c9b9a99989796959493929190611579565b34801561020f57600080fd5b5061017060025481565b34801561022557600080fd5b506101236102343660046113df565b610914565b610123610247366004611608565b610a72565b34801561025857600080fd5b5060015461026c906001600160a01b031681565b6040516001600160a01b039091168152602001610152565b6101236102923660046113df565b610bab565b6101706102a5366004611653565b610ca7565b3480156102b657600080fd5b506101236102c53660046113df565b610f3d565b3480156102d657600080fd5b506102ea6102e53660046113df565b61116f565b6040519015158152602001610152565b34801561030657600080fd5b50610123610315366004611608565b61125e565b34801561032657600080fd5b5060005461026c906001600160a01b031681565b600081815260036020526040902060018101546001600160a01b031661037357604051638a83969360e01b815260040160405180910390fd5b60028101546001600160a01b03161561039f5760405163ac9725ff60e01b815260040160405180910390fd5b806006015442116103c3576040516337bf561360e11b815260040160405180910390fd5b600781015460ff16156103e957604051630c8d9eab60e31b815260040160405180910390fd5b600781018054600283018054600160a01b810460ff161515600160a81b0260ff60a81b199091161790556001838101546001600160a01b0316610100026001600160a81b0319909216919091171790556004810154600382015460009161044f91611730565b60018301546040519192506000916001600160a01b039091169083908381818185875af1925050503d80600081146104a3576040519150601f19603f3d011682016040523d82523d6000602084013e6104a8565b606091505b50509050806104ca576040516312171d8360e31b815260040160405180910390fd5b6001830154604080518681526001600160a01b03909216602083015281018390527f24b5efa61dd1cfc659205a97fb8ed868f3cb8c81922bab2b96423e5de1de2cb79060600160405180910390a150505050565b604080516101808101825260008082526020820181905291810182905260608082018390526080820183905260a0820183905260c0820183905260e082018390526101008201839052610120820183905261014082019290925261016081019190915260008281526003602081815260409283902083516101808101855281546001600160a01b039081168252600183015481169382019390935260028201548084169582019590955260ff600160a01b8604811615156060830152600160a81b9095048516151560808201529281015460a0840152600481015460c0840152600581015460e084015260068101546101008085019190915260078201549485161515610120850152909304166101408201526008820180549192916101608401919061064a90611749565b80601f016020809104026020016040519081016040528092919081815260200182805461067690611749565b80156106c35780601f10610698576101008083540402835291602001916106c3565b820191906000526020600020905b8154815290600101906020018083116106a657829003601f168201915b5050505050815250509050919050565b600081815260036020526040812080546001600160a01b03166106f95750600092915050565b600781015461010090046001600160a01b03161561071a5750600492915050565b60028101546001600160a01b0316156107365750600392915050565b60018101546001600160a01b031661076657806006015442111561075d5750600592915050565b50600192915050565b806006015442111561077b5750600492915050565b50600292915050565b6001546001600160a01b031633146107af57604051635fc483c560e01b815260040160405180910390fd5b600080546001600160a01b038381166001600160a01b031983168117909355604080519190921680825260208201939093527f44b195f672f12d3150e8ec40f5b2be271828f1e7be16b3a55e61f7a2c53efc3d91015b60405180910390a15050565b60036020819052600091825260409091208054600182015460028301549383015460048401546005850154600686015460078701546008880180546001600160a01b039889169a97891699888a169960ff600160a01b8b0481169a600160a81b900481169998979695908116946101009091049091169261089190611749565b80601f01602080910402602001604051908101604052809291908181526020018280546108bd90611749565b801561090a5780601f106108df5761010080835404028352916020019161090a565b820191906000526020600020905b8154815290600101906020018083116108ed57829003601f168201915b505050505090508c565b600081815260036020526040902060018101546001600160a01b03161561094e5760405163062989cf60e11b815260040160405180910390fd5b80600601544211610972576040516337bf561360e11b815260040160405180910390fd5b600781015460ff161561099857604051630c8d9eab60e31b815260040160405180910390fd5b60078101805460ff19166001179055805460038201546040516000926001600160a01b031691908381818185875af1925050503d80600081146109f7576040519150601f19603f3d011682016040523d82523d6000602084013e6109fc565b606091505b5050905080610a1e576040516312171d8360e31b815260040160405180910390fd5b81546003830154604080518681526001600160a01b0390931660208401528201527ff3f402280ef0a7905e124aa621b65eaeb2725c343e8b36d398ed78c29daf285c906060015b60405180910390a1505050565b600082815260036020526040902080546001600160a01b0316610aa8576040516325f67a0760e21b815260040160405180910390fd5b60018101546001600160a01b031615610ad45760405163062989cf60e11b815260040160405180910390fd5b8060050154421080610ae95750806006015442115b15610b07576040516337bf561360e11b815260040160405180910390fd5b80600401543414610b2b57604051632a9ffab760e21b815260040160405180910390fd5b6001810180546001600160a01b03191633179055600281018054831515600160a01b0260ff60a01b19909116179055610b6560b442611730565b600682015560408051848152336020820152831515918101919091527f2e97f40e66e2eaaa8ae31d3f66dfc8a18edb91c0bc70080dae0241aabc85f52b90606001610a65565b600081815260036020526040902060018101546001600160a01b0316610be457604051638a83969360e01b815260040160405180910390fd5b60028101546001600160a01b031615610c105760405163ac9725ff60e01b815260040160405180910390fd5b8060060154421115610c35576040516337bf561360e11b815260040160405180910390fd5b80600401543414610c5957604051632a9ffab760e21b815260040160405180910390fd5b6002810180546001600160a01b031916339081179091556040805184815260208101929092527f4d1c7c2acc2af4568b065391bf84e3526ed432777f4780c7c92956c68198cd4c9101610805565b600034600003610cca57604051632a9ffab760e21b815260040160405180910390fd5b82600003610cd6574292505b81600003610cec57610ce960b484611730565b91505b42831015610d0d576040516337bf561360e11b815260040160405180910390fd5b828211610d2d576040516337bf561360e11b815260040160405180910390fd5b60b4610d398484611783565b1015610d58576040516337bf561360e11b815260040160405180910390fd5b604080516101808101825233815260006020820181905291810182905260608101829052608081018290523460a0820181905260c0820190610d9b906002611796565b81526020808201879052604080830187905260006060808501829052608080860183905260a09586018c9052600280548452600380875293859020885181546001600160a01b03199081166001600160a01b03928316178355978a01516001830180549099169082161790975594880151908501805493890151928901519187166001600160a81b031994851617600160a01b931515939093029290921760ff60a81b1916600160a81b91151591909102179055938501519082015560c0840151600482015560e084015160058201556101008085015160068301556101208501516007830180546101408801519616911515610100600160a81b03191691909117949093160292909217905561016082015191925082916008820190610ec290826117fc565b50506002805491506000610ed5836118bb565b91905055507f4accbd7d2745189087b035e2702b3c41835f88430aa9adb958627224c1cbb3216001600254610f0a9190611783565b338734604051610f1d94939291906118d4565b60405180910390a16001600254610f349190611783565b95945050505050565b600081815260036020526040902060018101546001600160a01b0316610f7657604051638a83969360e01b815260040160405180910390fd5b60028101546001600160a01b0316610fa15760405163e8ac3fab60e01b815260040160405180910390fd5b600781015461010090046001600160a01b0316610fd157604051630b4132af60e41b815260040160405180910390fd5b600781015460ff1615610ff757604051630c8d9eab60e31b815260040160405180910390fd5b60078101805460ff191660011790556004810154600382015460009161101c91611730565b60048301546007840154604051929350909160009161010090046001600160a01b03169084908381818185875af1925050503d806000811461107a576040519150601f19603f3d011682016040523d82523d6000602084013e61107f565b606091505b50509050806110a1576040516312171d8360e31b815260040160405180910390fd5b600080546040516001600160a01b039091169084908381818185875af1925050503d80600081146110ee576040519150601f19603f3d011682016040523d82523d6000602084013e6110f3565b606091505b5050905080611115576040516312171d8360e31b815260040160405180910390fd5b6007850154604080518881526101009092046001600160a01b0316602083015281018590527f24b5efa61dd1cfc659205a97fb8ed868f3cb8c81922bab2b96423e5de1de2cb79060600160405180910390a1505050505050565b600081815260036020526040812080546001600160a01b03166111a5576040516325f67a0760e21b815260040160405180910390fd5b60018101546001600160a01b03166111d057604051638a83969360e01b815260040160405180910390fd5b60028101546001600160a01b031661121a5780600601544211611206576040516337bf561360e11b815260040160405180910390fd5b60020154600160a01b900460ff1692915050565b600781015461010090046001600160a01b031661124a57604051630b4132af60e41b815260040160405180910390fd5b60020154600160a81b900460ff1692915050565b6000546001600160a01b0316331461128957604051631bc723a960e31b815260040160405180910390fd5b600082815260036020526040902060018101546001600160a01b03166112c257604051638a83969360e01b815260040160405180910390fd5b60028101546001600160a01b03166112ed5760405163e8ac3fab60e01b815260040160405180910390fd5b600781015461010090046001600160a01b03161561131d5760405162560ff960e81b815260040160405180910390fd5b600281018054831515600160a81b810260ff60a81b199092169190911791829055600160a01b90910460ff161515146113635760028101546001600160a01b0316611372565b60018101546001600160a01b03165b600782018054610100600160a81b0319166101006001600160a01b039384168102919091179182905560408051878152861515602082015291909204909216908201527f27f6caee7bcd705e478ea4783620995916b1b3d562d683c8932a0c5d5998d95890606001610a65565b6000602082840312156113f157600080fd5b5035919050565b6000815180845260005b8181101561141e57602081850181015186830182015201611402565b506000602082860101526020601f19601f83011685010191505092915050565b602081526114586020820183516001600160a01b03169052565b6000602083015161147460408401826001600160a01b03169052565b5060408301516001600160a01b0381166060840152506060830151801515608084015250608083015180151560a08401525060a083015160c083015260c083015160e083015260e08301516101008301526101008301516101208301526101208301516114e661014084018215159052565b506101408301516001600160a01b03811661016084015250610160830151610180808401526115196101a08401826113f8565b949350505050565b602081016006831061154357634e487b7160e01b600052602160045260246000fd5b91905290565b60006020828403121561155b57600080fd5b81356001600160a01b038116811461157257600080fd5b9392505050565b6001600160a01b038d811682528c811660208301528b166040820152891515606082015288151560808201528760a08201528660c08201528560e0820152846101008201526115cd61012082018515159052565b6001600160a01b03831661014082015261018061016082015260006115f66101808301846113f8565b9e9d5050505050505050505050505050565b6000806040838503121561161b57600080fd5b823591506020830135801515811461163257600080fd5b809150509250929050565b634e487b7160e01b600052604160045260246000fd5b60008060006060848603121561166857600080fd5b833567ffffffffffffffff81111561167f57600080fd5b8401601f8101861361169057600080fd5b803567ffffffffffffffff8111156116aa576116aa61163d565b604051601f8201601f19908116603f0116810167ffffffffffffffff811182821017156116d9576116d961163d565b6040528181528282016020018810156116f157600080fd5b816020840160208301376000602092820183015297908601359650604090950135949350505050565b634e487b7160e01b600052601160045260246000fd5b808201808211156117435761174361171a565b92915050565b600181811c9082168061175d57607f821691505b60208210810361177d57634e487b7160e01b600052602260045260246000fd5b50919050565b818103818111156117435761174361171a565b80820281158282048414176117435761174361171a565b601f8211156117f757806000526020600020601f840160051c810160208510156117d45750805b601f840160051c820191505b818110156117f457600081556001016117e0565b50505b505050565b815167ffffffffffffffff8111156118165761181661163d565b61182a816118248454611749565b846117ad565b6020601f82116001811461185e57600083156118465750848201515b600019600385901b1c1916600184901b1784556117f4565b600084815260208120601f198516915b8281101561188e578785015182556020948501946001909201910161186e565b50848210156118ac5786840151600019600387901b60f8161c191681555b50505050600190811b01905550565b6000600182016118cd576118cd61171a565b5060010190565b8481526001600160a01b03841660208201526080604082018190526000906118fe908301856113f8565b90508260608301529594505050505056fea2646970667358221220345e4a273373155b0caa11d27a1f065a9abb6b8b532141b0eff3d8d747421a6f64736f6c634300081e0033",
+  "deployedBytecode": "0x6080604052600436106100fe5760003560e01c806388553a2a11610095578063d21a727d11610064578063d21a727d146102aa578063d565a533146102ca578063db4295b7146102fa578063f585dc571461015b578063fc6def151461031a57600080fd5b806388553a2a146102395780638da5cb5b1461024c578063a9809c2b14610284578063b40b6d001461029757600080fd5b80634d7ba587116100d15780634d7ba587146101ab578063524232f6146101cb5780635b366bb9146102035780635b7baf641461021957600080fd5b806302f5ee7e146101035780631d99e167146101255780632db4f2331461015b57806344c9af281461017e575b600080fd5b34801561010f57600080fd5b5061012361011e3660046113df565b61033a565b005b34801561013157600080fd5b506101456101403660046113df565b61051e565b604051610152919061143e565b60405180910390f35b34801561016757600080fd5b5061017060b481565b604051908152602001610152565b34801561018a57600080fd5b5061019e6101993660046113df565b6106d3565b6040516101529190611521565b3480156101b757600080fd5b506101236101c6366004611549565b610784565b3480156101d757600080fd5b506101eb6101e63660046113df565b610811565b6040516101529c9b9a99989796959493929190611579565b34801561020f57600080fd5b5061017060025481565b34801561022557600080fd5b506101236102343660046113df565b610914565b610123610247366004611608565b610a72565b34801561025857600080fd5b5060015461026c906001600160a01b031681565b6040516001600160a01b039091168152602001610152565b6101236102923660046113df565b610bab565b6101706102a5366004611653565b610ca7565b3480156102b657600080fd5b506101236102c53660046113df565b610f3d565b3480156102d657600080fd5b506102ea6102e53660046113df565b61116f565b6040519015158152602001610152565b34801561030657600080fd5b50610123610315366004611608565b61125e565b34801561032657600080fd5b5060005461026c906001600160a01b031681565b600081815260036020526040902060018101546001600160a01b031661037357604051638a83969360e01b815260040160405180910390fd5b60028101546001600160a01b03161561039f5760405163ac9725ff60e01b815260040160405180910390fd5b806006015442116103c3576040516337bf561360e11b815260040160405180910390fd5b600781015460ff16156103e957604051630c8d9eab60e31b815260040160405180910390fd5b600781018054600283018054600160a01b810460ff161515600160a81b0260ff60a81b199091161790556001838101546001600160a01b0316610100026001600160a81b0319909216919091171790556004810154600382015460009161044f91611730565b60018301546040519192506000916001600160a01b039091169083908381818185875af1925050503d80600081146104a3576040519150601f19603f3d011682016040523d82523d6000602084013e6104a8565b606091505b50509050806104ca576040516312171d8360e31b815260040160405180910390fd5b6001830154604080518681526001600160a01b03909216602083015281018390527f24b5efa61dd1cfc659205a97fb8ed868f3cb8c81922bab2b96423e5de1de2cb79060600160405180910390a150505050565b604080516101808101825260008082526020820181905291810182905260608082018390526080820183905260a0820183905260c0820183905260e082018390526101008201839052610120820183905261014082019290925261016081019190915260008281526003602081815260409283902083516101808101855281546001600160a01b039081168252600183015481169382019390935260028201548084169582019590955260ff600160a01b8604811615156060830152600160a81b9095048516151560808201529281015460a0840152600481015460c0840152600581015460e084015260068101546101008085019190915260078201549485161515610120850152909304166101408201526008820180549192916101608401919061064a90611749565b80601f016020809104026020016040519081016040528092919081815260200182805461067690611749565b80156106c35780601f10610698576101008083540402835291602001916106c3565b820191906000526020600020905b8154815290600101906020018083116106a657829003601f168201915b5050505050815250509050919050565b600081815260036020526040812080546001600160a01b03166106f95750600092915050565b600781015461010090046001600160a01b03161561071a5750600492915050565b60028101546001600160a01b0316156107365750600392915050565b60018101546001600160a01b031661076657806006015442111561075d5750600592915050565b50600192915050565b806006015442111561077b5750600492915050565b50600292915050565b6001546001600160a01b031633146107af57604051635fc483c560e01b815260040160405180910390fd5b600080546001600160a01b038381166001600160a01b031983168117909355604080519190921680825260208201939093527f44b195f672f12d3150e8ec40f5b2be271828f1e7be16b3a55e61f7a2c53efc3d91015b60405180910390a15050565b60036020819052600091825260409091208054600182015460028301549383015460048401546005850154600686015460078701546008880180546001600160a01b039889169a97891699888a169960ff600160a01b8b0481169a600160a81b900481169998979695908116946101009091049091169261089190611749565b80601f01602080910402602001604051908101604052809291908181526020018280546108bd90611749565b801561090a5780601f106108df5761010080835404028352916020019161090a565b820191906000526020600020905b8154815290600101906020018083116108ed57829003601f168201915b505050505090508c565b600081815260036020526040902060018101546001600160a01b03161561094e5760405163062989cf60e11b815260040160405180910390fd5b80600601544211610972576040516337bf561360e11b815260040160405180910390fd5b600781015460ff161561099857604051630c8d9eab60e31b815260040160405180910390fd5b60078101805460ff19166001179055805460038201546040516000926001600160a01b031691908381818185875af1925050503d80600081146109f7576040519150601f19603f3d011682016040523d82523d6000602084013e6109fc565b606091505b5050905080610a1e576040516312171d8360e31b815260040160405180910390fd5b81546003830154604080518681526001600160a01b0390931660208401528201527ff3f402280ef0a7905e124aa621b65eaeb2725c343e8b36d398ed78c29daf285c906060015b60405180910390a1505050565b600082815260036020526040902080546001600160a01b0316610aa8576040516325f67a0760e21b815260040160405180910390fd5b60018101546001600160a01b031615610ad45760405163062989cf60e11b815260040160405180910390fd5b8060050154421080610ae95750806006015442115b15610b07576040516337bf561360e11b815260040160405180910390fd5b80600401543414610b2b57604051632a9ffab760e21b815260040160405180910390fd5b6001810180546001600160a01b03191633179055600281018054831515600160a01b0260ff60a01b19909116179055610b6560b442611730565b600682015560408051848152336020820152831515918101919091527f2e97f40e66e2eaaa8ae31d3f66dfc8a18edb91c0bc70080dae0241aabc85f52b90606001610a65565b600081815260036020526040902060018101546001600160a01b0316610be457604051638a83969360e01b815260040160405180910390fd5b60028101546001600160a01b031615610c105760405163ac9725ff60e01b815260040160405180910390fd5b8060060154421115610c35576040516337bf561360e11b815260040160405180910390fd5b80600401543414610c5957604051632a9ffab760e21b815260040160405180910390fd5b6002810180546001600160a01b031916339081179091556040805184815260208101929092527f4d1c7c2acc2af4568b065391bf84e3526ed432777f4780c7c92956c68198cd4c9101610805565b600034600003610cca57604051632a9ffab760e21b815260040160405180910390fd5b82600003610cd6574292505b81600003610cec57610ce960b484611730565b91505b42831015610d0d576040516337bf561360e11b815260040160405180910390fd5b828211610d2d576040516337bf561360e11b815260040160405180910390fd5b60b4610d398484611783565b1015610d58576040516337bf561360e11b815260040160405180910390fd5b604080516101808101825233815260006020820181905291810182905260608101829052608081018290523460a0820181905260c0820190610d9b906002611796565b81526020808201879052604080830187905260006060808501829052608080860183905260a09586018c9052600280548452600380875293859020885181546001600160a01b03199081166001600160a01b03928316178355978a01516001830180549099169082161790975594880151908501805493890151928901519187166001600160a81b031994851617600160a01b931515939093029290921760ff60a81b1916600160a81b91151591909102179055938501519082015560c0840151600482015560e084015160058201556101008085015160068301556101208501516007830180546101408801519616911515610100600160a81b03191691909117949093160292909217905561016082015191925082916008820190610ec290826117fc565b50506002805491506000610ed5836118bb565b91905055507f4accbd7d2745189087b035e2702b3c41835f88430aa9adb958627224c1cbb3216001600254610f0a9190611783565b338734604051610f1d94939291906118d4565b60405180910390a16001600254610f349190611783565b95945050505050565b600081815260036020526040902060018101546001600160a01b0316610f7657604051638a83969360e01b815260040160405180910390fd5b60028101546001600160a01b0316610fa15760405163e8ac3fab60e01b815260040160405180910390fd5b600781015461010090046001600160a01b0316610fd157604051630b4132af60e41b815260040160405180910390fd5b600781015460ff1615610ff757604051630c8d9eab60e31b815260040160405180910390fd5b60078101805460ff191660011790556004810154600382015460009161101c91611730565b60048301546007840154604051929350909160009161010090046001600160a01b03169084908381818185875af1925050503d806000811461107a576040519150601f19603f3d011682016040523d82523d6000602084013e61107f565b606091505b50509050806110a1576040516312171d8360e31b815260040160405180910390fd5b600080546040516001600160a01b039091169084908381818185875af1925050503d80600081146110ee576040519150601f19603f3d011682016040523d82523d6000602084013e6110f3565b606091505b5050905080611115576040516312171d8360e31b815260040160405180910390fd5b6007850154604080518881526101009092046001600160a01b0316602083015281018590527f24b5efa61dd1cfc659205a97fb8ed868f3cb8c81922bab2b96423e5de1de2cb79060600160405180910390a1505050505050565b600081815260036020526040812080546001600160a01b03166111a5576040516325f67a0760e21b815260040160405180910390fd5b60018101546001600160a01b03166111d057604051638a83969360e01b815260040160405180910390fd5b60028101546001600160a01b031661121a5780600601544211611206576040516337bf561360e11b815260040160405180910390fd5b60020154600160a01b900460ff1692915050565b600781015461010090046001600160a01b031661124a57604051630b4132af60e41b815260040160405180910390fd5b60020154600160a81b900460ff1692915050565b6000546001600160a01b0316331461128957604051631bc723a960e31b815260040160405180910390fd5b600082815260036020526040902060018101546001600160a01b03166112c257604051638a83969360e01b815260040160405180910390fd5b60028101546001600160a01b03166112ed5760405163e8ac3fab60e01b815260040160405180910390fd5b600781015461010090046001600160a01b03161561131d5760405162560ff960e81b815260040160405180910390fd5b600281018054831515600160a81b810260ff60a81b199092169190911791829055600160a01b90910460ff161515146113635760028101546001600160a01b0316611372565b60018101546001600160a01b03165b600782018054610100600160a81b0319166101006001600160a01b039384168102919091179182905560408051878152861515602082015291909204909216908201527f27f6caee7bcd705e478ea4783620995916b1b3d562d683c8932a0c5d5998d95890606001610a65565b6000602082840312156113f157600080fd5b5035919050565b6000815180845260005b8181101561141e57602081850181015186830182015201611402565b506000602082860101526020601f19601f83011685010191505092915050565b602081526114586020820183516001600160a01b03169052565b6000602083015161147460408401826001600160a01b03169052565b5060408301516001600160a01b0381166060840152506060830151801515608084015250608083015180151560a08401525060a083015160c083015260c083015160e083015260e08301516101008301526101008301516101208301526101208301516114e661014084018215159052565b506101408301516001600160a01b03811661016084015250610160830151610180808401526115196101a08401826113f8565b949350505050565b602081016006831061154357634e487b7160e01b600052602160045260246000fd5b91905290565b60006020828403121561155b57600080fd5b81356001600160a01b038116811461157257600080fd5b9392505050565b6001600160a01b038d811682528c811660208301528b166040820152891515606082015288151560808201528760a08201528660c08201528560e0820152846101008201526115cd61012082018515159052565b6001600160a01b03831661014082015261018061016082015260006115f66101808301846113f8565b9e9d5050505050505050505050505050565b6000806040838503121561161b57600080fd5b823591506020830135801515811461163257600080fd5b809150509250929050565b634e487b7160e01b600052604160045260246000fd5b60008060006060848603121561166857600080fd5b833567ffffffffffffffff81111561167f57600080fd5b8401601f8101861361169057600080fd5b803567ffffffffffffffff8111156116aa576116aa61163d565b604051601f8201601f19908116603f0116810167ffffffffffffffff811182821017156116d9576116d961163d565b6040528181528282016020018810156116f157600080fd5b816020840160208301376000602092820183015297908601359650604090950135949350505050565b634e487b7160e01b600052601160045260246000fd5b808201808211156117435761174361171a565b92915050565b600181811c9082168061175d57607f821691505b60208210810361177d57634e487b7160e01b600052602260045260246000fd5b50919050565b818103818111156117435761174361171a565b80820281158282048414176117435761174361171a565b601f8211156117f757806000526020600020601f840160051c810160208510156117d45750805b601f840160051c820191505b818110156117f457600081556001016117e0565b50505b505050565b815167ffffffffffffffff8111156118165761181661163d565b61182a816118248454611749565b846117ad565b6020601f82116001811461185e57600083156118465750848201515b600019600385901b1c1916600184901b1784556117f4565b600084815260208120601f198516915b8281101561188e578785015182556020948501946001909201910161186e565b50848210156118ac5786840151600019600387901b60f8161c191681555b50505050600190811b01905550565b6000600182016118cd576118cd61171a565b5060010190565b8481526001600160a01b03841660208201526080604082018190526000906118fe908301856113f8565b90508260608301529594505050505056fea2646970667358221220345e4a273373155b0caa11d27a1f065a9abb6b8b532141b0eff3d8d747421a6f64736f6c634300081e0033",
+  "devdoc": {
+    "kind": "dev",
+    "methods": {
+      "assertEvent(string,uint256,uint256)": {
+        "details": "Requires ETH payment as reward for correct proposers. Bond requirement is 2x the reward.      Sets default timestamps if not provided. Validates timing requirements.",
+        "params": {
+          "description": "Human-readable description of the event (e.g. \"Did X happen by time Y?\")",
+          "endTime": "When the assertion expires (0 for startTime + minimum window)",
+          "startTime": "When proposals can begin (0 for current block timestamp)"
+        },
+        "returns": {
+          "_0": "The unique assertion ID for the newly created assertion"
+        }
+      },
+      "claimDisputedReward(uint256)": {
+        "details": "Anyone can trigger this function. Pays decider fee and transfers remaining rewards to winner.      Can only be called after decider has settled the dispute.",
+        "params": {
+          "assertionId": "The unique identifier of the disputed assertion to claim rewards for"
+        }
+      },
+      "claimRefund(uint256)": {
+        "details": "Anyone can trigger this function. Returns the original reward to the asserter.      Can only be called after assertion deadline has passed without any proposals.",
+        "params": {
+          "assertionId": "The unique identifier of the expired assertion to claim refund for"
+        }
+      },
+      "claimUndisputedReward(uint256)": {
+        "details": "Anyone can trigger this function. Transfers reward + bond to the proposer.      Can only be called after dispute window has passed without disputes.",
+        "params": {
+          "assertionId": "The unique identifier of the assertion to claim rewards for"
+        }
+      },
+      "disputeOutcome(uint256)": {
+        "details": "Requires bonding ETH equal to the bond amount. Can only dispute once per assertion      and must be within the dispute window after proposal.",
+        "params": {
+          "assertionId": "The unique identifier of the assertion to dispute"
+        }
+      },
+      "getAssertion(uint256)": {
+        "details": "Provides access to all fields of the EventAssertion struct",
+        "params": {
+          "assertionId": "The unique identifier of the assertion to retrieve"
+        },
+        "returns": {
+          "_0": "The complete EventAssertion struct containing all assertion data"
+        }
+      },
+      "getResolution(uint256)": {
+        "details": "For undisputed assertions, returns the proposed outcome after dispute window.      For disputed assertions, returns the decider's resolved outcome.",
+        "params": {
+          "assertionId": "The unique identifier of the assertion to get resolution for"
+        },
+        "returns": {
+          "_0": "The final boolean outcome of the assertion"
+        }
+      },
+      "getState(uint256)": {
+        "details": "Evaluates assertion progress through states: Invalid, Asserted, Proposed, Disputed, Settled, Expired",
+        "params": {
+          "assertionId": "The unique identifier of the assertion to check state for"
+        },
+        "returns": {
+          "_0": "The current State enum value representing the assertion's status"
+        }
+      },
+      "proposeOutcome(uint256,bool)": {
+        "details": "Requires bonding ETH equal to 2x the original reward. Sets dispute window deadline.      Can only be called once per assertion and within the assertion time window.",
+        "params": {
+          "assertionId": "The unique identifier of the assertion to propose an outcome for",
+          "outcome": "The proposed boolean outcome (true or false) for the event"
+        }
+      },
+      "setDecider(address)": {
+        "details": "Changes the address authorized to settle disputed assertions.      Emits DeciderUpdated event with old and new addresses.",
+        "params": {
+          "_decider": "The new address that will act as decider for disputed assertions"
+        }
+      },
+      "settleAssertion(uint256,bool)": {
+        "details": "Sets the resolved outcome and determines winner based on proposal accuracy.",
+        "params": {
+          "assertionId": "The unique identifier of the disputed assertion to settle",
+          "resolvedOutcome": "The decider's determination of the true outcome"
+        }
+      }
+    },
+    "version": 1
+  },
+  "userdoc": {
+    "errors": {
+      "AssertionNotFound()": [
+        {
+          "notice": "Errors //////"
+        }
+      ]
+    },
+    "events": {
+      "EventAsserted(uint256,address,string,uint256)": {
+        "notice": "Events /////"
+      }
+    },
+    "kind": "user",
+    "methods": {
+      "assertEvent(string,uint256,uint256)": {
+        "notice": "Creates a new assertion about an event with a true/false outcome"
+      },
+      "claimDisputedReward(uint256)": {
+        "notice": "Claims reward for disputed assertions after decider settlement"
+      },
+      "claimRefund(uint256)": {
+        "notice": "Claims refund for assertions that receive no proposals before deadline"
+      },
+      "claimUndisputedReward(uint256)": {
+        "notice": "Claims reward for undisputed assertions after dispute window expires"
+      },
+      "constructor": {
+        "notice": "Constructor ///"
+      },
+      "disputeOutcome(uint256)": {
+        "notice": "Disputes a proposed outcome by bonding ETH"
+      },
+      "getAssertion(uint256)": {
+        "notice": "Returns the complete assertion details for a given assertion ID"
+      },
+      "getResolution(uint256)": {
+        "notice": "Returns the final resolved outcome of a settled assertion"
+      },
+      "getState(uint256)": {
+        "notice": "Returns the current state of an assertion based on its lifecycle stage"
+      },
+      "proposeOutcome(uint256,bool)": {
+        "notice": "Proposes the outcome (true or false) for an asserted event"
+      },
+      "setDecider(address)": {
+        "notice": "Updates the decider address (only contract owner)"
+      },
+      "settleAssertion(uint256,bool)": {
+        "notice": "Resolves disputed assertions by determining the correct outcome (only decider)"
+      }
+    },
+    "version": 1
+  },
+  "storageLayout": {
+    "storage": [
+      {
+        "astId": 70,
+        "contract": "contracts/02_Optimistic/OptimisticOracle.sol:OptimisticOracle",
+        "label": "decider",
+        "offset": 0,
+        "slot": "0",
+        "type": "t_address"
+      },
+      {
+        "astId": 72,
+        "contract": "contracts/02_Optimistic/OptimisticOracle.sol:OptimisticOracle",
+        "label": "owner",
+        "offset": 0,
+        "slot": "1",
+        "type": "t_address"
+      },
+      {
+        "astId": 75,
+        "contract": "contracts/02_Optimistic/OptimisticOracle.sol:OptimisticOracle",
+        "label": "nextAssertionId",
+        "offset": 0,
+        "slot": "2",
+        "type": "t_uint256"
+      },
+      {
+        "astId": 80,
+        "contract": "contracts/02_Optimistic/OptimisticOracle.sol:OptimisticOracle",
+        "label": "assertions",
+        "offset": 0,
+        "slot": "3",
+        "type": "t_mapping(t_uint256,t_struct(EventAssertion)62_storage)"
+      }
+    ],
+    "types": {
+      "t_address": {
+        "encoding": "inplace",
+        "label": "address",
+        "numberOfBytes": "20"
+      },
+      "t_bool": {
+        "encoding": "inplace",
+        "label": "bool",
+        "numberOfBytes": "1"
+      },
+      "t_mapping(t_uint256,t_struct(EventAssertion)62_storage)": {
+        "encoding": "mapping",
+        "key": "t_uint256",
+        "label": "mapping(uint256 => struct OptimisticOracle.EventAssertion)",
+        "numberOfBytes": "32",
+        "value": "t_struct(EventAssertion)62_storage"
+      },
+      "t_string_storage": {
+        "encoding": "bytes",
+        "label": "string",
+        "numberOfBytes": "32"
+      },
+      "t_struct(EventAssertion)62_storage": {
+        "encoding": "inplace",
+        "label": "struct OptimisticOracle.EventAssertion",
+        "members": [
+          {
+            "astId": 39,
+            "contract": "contracts/02_Optimistic/OptimisticOracle.sol:OptimisticOracle",
+            "label": "asserter",
+            "offset": 0,
+            "slot": "0",
+            "type": "t_address"
+          },
+          {
+            "astId": 41,
+            "contract": "contracts/02_Optimistic/OptimisticOracle.sol:OptimisticOracle",
+            "label": "proposer",
+            "offset": 0,
+            "slot": "1",
+            "type": "t_address"
+          },
+          {
+            "astId": 43,
+            "contract": "contracts/02_Optimistic/OptimisticOracle.sol:OptimisticOracle",
+            "label": "disputer",
+            "offset": 0,
+            "slot": "2",
+            "type": "t_address"
+          },
+          {
+            "astId": 45,
+            "contract": "contracts/02_Optimistic/OptimisticOracle.sol:OptimisticOracle",
+            "label": "proposedOutcome",
+            "offset": 20,
+            "slot": "2",
+            "type": "t_bool"
+          },
+          {
+            "astId": 47,
+            "contract": "contracts/02_Optimistic/OptimisticOracle.sol:OptimisticOracle",
+            "label": "resolvedOutcome",
+            "offset": 21,
+            "slot": "2",
+            "type": "t_bool"
+          },
+          {
+            "astId": 49,
+            "contract": "contracts/02_Optimistic/OptimisticOracle.sol:OptimisticOracle",
+            "label": "reward",
+            "offset": 0,
+            "slot": "3",
+            "type": "t_uint256"
+          },
+          {
+            "astId": 51,
+            "contract": "contracts/02_Optimistic/OptimisticOracle.sol:OptimisticOracle",
+            "label": "bond",
+            "offset": 0,
+            "slot": "4",
+            "type": "t_uint256"
+          },
+          {
+            "astId": 53,
+            "contract": "contracts/02_Optimistic/OptimisticOracle.sol:OptimisticOracle",
+            "label": "startTime",
+            "offset": 0,
+            "slot": "5",
+            "type": "t_uint256"
+          },
+          {
+            "astId": 55,
+            "contract": "contracts/02_Optimistic/OptimisticOracle.sol:OptimisticOracle",
+            "label": "endTime",
+            "offset": 0,
+            "slot": "6",
+            "type": "t_uint256"
+          },
+          {
+            "astId": 57,
+            "contract": "contracts/02_Optimistic/OptimisticOracle.sol:OptimisticOracle",
+            "label": "claimed",
+            "offset": 0,
+            "slot": "7",
+            "type": "t_bool"
+          },
+          {
+            "astId": 59,
+            "contract": "contracts/02_Optimistic/OptimisticOracle.sol:OptimisticOracle",
+            "label": "winner",
+            "offset": 1,
+            "slot": "7",
+            "type": "t_address"
+          },
+          {
+            "astId": 61,
+            "contract": "contracts/02_Optimistic/OptimisticOracle.sol:OptimisticOracle",
+            "label": "description",
+            "offset": 0,
+            "slot": "8",
+            "type": "t_string_storage"
+          }
+        ],
+        "numberOfBytes": "288"
+      },
+      "t_uint256": {
+        "encoding": "inplace",
+        "label": "uint256",
+        "numberOfBytes": "32"
+      }
+    }
+  }
+}
