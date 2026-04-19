@@ -102,7 +102,7 @@ const deployedContracts = {
         },
       ],
       inheritedFunctions: {},
-      deployedOnBlock: 535,
+      deployedOnBlock: 9995,
     },
     OptimisticOracle: {
       address: "0x0B306BF915C4d645ff596e518fAf3F9669b97016",
@@ -742,7 +742,7 @@ const deployedContracts = {
         },
       ],
       inheritedFunctions: {},
-      deployedOnBlock: 531,
+      deployedOnBlock: 9991,
     },
     ORA: {
       address: "0xA51c1fc2f0D1a1b8494Ed1FE312d7C3a78Ed91C0",
@@ -1259,7 +1259,7 @@ const deployedContracts = {
         },
       ],
       inheritedFunctions: {},
-      deployedOnBlock: 522,
+      deployedOnBlock: 9982,
     },
     StakingOracle: {
       address: "0x0DCd1Bf9A1b36cE34237eEaFef220932846BCD82",
@@ -1925,7 +1925,7 @@ const deployedContracts = {
         },
       ],
       inheritedFunctions: {},
-      deployedOnBlock: 526,
+      deployedOnBlock: 9986,
     },
     WhitelistOracle: {
       address: "0x5FbDB2315678afecb367f032d93F642f64180aa3",
@@ -2086,7 +2086,7 @@ const deployedContracts = {
         },
       ],
       inheritedFunctions: {},
-      deployedOnBlock: 505,
+      deployedOnBlock: 9962,
     },
   },
 } as const;

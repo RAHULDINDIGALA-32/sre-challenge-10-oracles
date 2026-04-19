@@ -323,7 +323,22 @@ contract OptimisticOracle {
      * @param assertionId The unique identifier of the assertion to check state for
      * @return The current State enum value representing the assertion's status
      */
-    function getState(uint256 assertionId) external view returns (State) {}
+    function getState(uint256 assertionId) external view returns (State) {
+        EventAssertion storage assertion = assertions[assertionId];
+
+        if (assertion.asserter == address(0)) return State.Invalid;
+        if (assertion.winner != address(0)) return State.Settled;
+        if (assertion.disputer != address(0)) return State.Disputed;
+
+        if (assertion.proposer == address(0)) {
+            if(block.timestamp > assertion.endTime) return State.Expired;
+            return State.Asserted;
+        }
+
+        if (block.timestamp > assertion.endTime) return State.Settled;
+
+        return State.Proposed;
+    }
 
     /**
      * @notice Returns the final resolved outcome of a settled assertion
@@ -332,5 +347,19 @@ contract OptimisticOracle {
      * @param assertionId The unique identifier of the assertion to get resolution for
      * @return The final boolean outcome of the assertion
      */
-    function getResolution(uint256 assertionId) external view returns (bool) {}
+    function getResolution(uint256 assertionId) external view returns (bool) {
+        EventAssertion storage assertion = assertions[assertionId];
+
+        if (assertion.asserter == address(0)) revert AssertionNotFound();
+        if (assertion.proposer == address(0)) revert NotProposedAssertion();
+       
+       if (assertion.disputer == address(0)) {
+            if (block.timestamp <= assertion.endTime) revert InvalidTime();
+            return assertion.proposedOutcome; // Undisputed resolution
+        }
+
+        if (assertion.winner == address(0)) revert AwaitingDecider();
+
+        return assertion.resolvedOutcome; // Disputed resolution 
+    }
 }
